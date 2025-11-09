@@ -48,14 +48,16 @@
 							:key="item.index"
 							v-tooltip.top="item.name"
 							:class="['color-button', {
-								'color-button-selected': selectedColor === `rgba(${item.rgba.join(',')})`
+								'color-button--transparent': item.rgba[3] === 0,
+								'color-button--selected': selectedColor === `rgba(${item.rgba.join(',')})`
 							}]"
 							:style="{ backgroundColor: `rgba(${item.rgba.join(',')})` }"
 							:raised="selectedColor === `rgba(${item.rgba.join(',')})`"
 							:disabled="!isColorUnlocked(item.index, extraColorsBitmap)"
 							:aria-label="isColorUnlocked(item.index, extraColorsBitmap) ? 'Select color' : 'Color locked'"
-							@click="$emit('colorSelect', `rgba(${item.rgba.join(',')})`)"
-						/>
+							@click="$emit('colorSelect', `rgba(${item.rgba.join(',')})`)">
+							<span/>
+						</Button>
 					</div>
 
 					<PaintButton
@@ -102,10 +104,6 @@ defineEmits<{
 	width: 100%;
 }
 
-.palette-card {
-	box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-}
-
 .palette-header {
 	display: flex;
 	align-items: center;
@@ -146,21 +144,49 @@ defineEmits<{
 }
 
 .color-grid {
+	--cols: 8;
+	--gap: 0.25rem;
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-	gap: 0.5rem;
+	grid-template-columns: repeat(var(--cols), 1fr);
+	grid-auto-flow: row;
+	gap: var(--gap);
+}
+
+@media (min-width: 768px) {
+	.color-grid {
+		--cols: 16;
+		--size: 35px;
+	}
+}
+
+@media (min-width: 1500px) {
+	.color-grid {
+		--cols: 32;
+	}
 }
 
 .color-button {
 	min-width: 30px;
-	aspect-ratio: 1;
+	min-height: 30px;
 	padding: 0;
 	min-width: 30px;
-	border: 1px solid var(--p-surface-border);
+	border: 1px solid var(--p-button-outlined-secondary-border-color);
 	border-radius: 6px;
 }
 
-.color-button-selected {
+@media (min-height: 700px) {
+	.color-grid {
+		--gap: 0.5rem;
+	}
+
+	.color-button {
+		min-height: 40px;
+	}
+}
+
+.color-button--selected,
+.color-button--selected:hover,
+.color-button--selected:active {
 	border: 3px solid var(--p-primary-color);
 }
 
@@ -179,6 +205,19 @@ defineEmits<{
 	transform: translate(-50%, -50%);
 	font-size: 12px;
 	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
+}
+
+.color-button--transparent::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M0 0h8v16h8V8H0z' fill='%23000' fill-opacity='.2'/%3E%3C/svg%3E") 0 0/50% 50% repeat;
+}
+
+@media (prefers-color-scheme: dark) {
+	.color-button--transparent::before {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M0 0h8v16h8V8H0z' fill='%23fff' fill-opacity='.2'/%3E%3C/svg%3E");
+	}
 }
 
 .palette-paint-button {

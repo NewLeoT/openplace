@@ -53,6 +53,8 @@ model User {
   reportedNotes          UserNote[]             @relation("UserNoteReportedUser")
   regionStats            UserRegionStats[]
   regionStatsDaily       UserRegionStatsDaily[]
+  notifications          Notification[]         @relation("NotificationUser")
+  sentNotifications      Notification[]         @relation("NotificationSendingUser")
   createdAt              DateTime               @default(now())
   updatedAt              DateTime               @updatedAt
 
@@ -273,4 +275,42 @@ model UserRegionStatsDaily {
   @@index([regionCityId, date, pixelsPainted, userId])
   @@index([regionCityId, date, pixelsPainted, allianceId])
   @@index([regionCountryId, date, pixelsPainted])
+}
+
+model Notification {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  user          User     @relation("NotificationUser", fields: [userId], references: [id])
+  sendingUserId Int      @default(-1)
+  sendingUser   User     @relation("NotificationSendingUser", fields: [sendingUserId], references: [id])
+  read          Boolean  @default(false)
+  icon          String
+  title         String
+  message       String   @db.Text
+  createdAt     DateTime @default(now())
+
+  @@index([userId, read, createdAt])
+  @@index([userId, createdAt])
+}
+
+model SystemNotification {
+  id        Int                      @id @default(autoincrement())
+  icon      String
+  title     String
+  message   String                   @db.Text
+  createdAt DateTime                 @default(now())
+  readBy    SystemNotificationRead[]
+
+  @@index([createdAt])
+}
+
+model SystemNotificationRead {
+  id                   Int                @id @default(autoincrement())
+  systemNotificationId Int
+  systemNotification   SystemNotification @relation(fields: [systemNotificationId], references: [id])
+  userId               Int
+  readAt               DateTime           @default(now())
+
+  @@unique([systemNotificationId, userId])
+  @@index([userId])
 }

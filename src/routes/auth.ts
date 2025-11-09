@@ -6,7 +6,7 @@ import { authMiddleware } from "../middleware/auth.js";
 import jwt from "jsonwebtoken";
 import fs from "fs/promises";
 import { COOLDOWN_MS, UserService } from "../services/user.js";
-import { AuthenticatedRequest, BanReason } from "../types/index.js";
+import { AuthenticatedRequest, BanReason, UserRole } from "../types/index.js";
 import { AuthService, AuthToken } from "../services/auth.js";
 import { getRandomUniqueName } from "../utils/unique-name.js";
 import { rateLimiter } from "../services/rate-limiter.js";
@@ -15,6 +15,8 @@ import { discordBot } from "../discord/bot.js";
 const userService = new UserService(prisma);
 const authService = new AuthService(prisma);
 
+// TODO: Refactor into service
+// eslint-disable-next-line max-lines-per-function
 export default function (app: App) {
 	app.get("/login", async (_req, res) => {
 		const loginHtml = await fs.readFile("./src/public/login.html", "utf8");
@@ -51,7 +53,6 @@ export default function (app: App) {
 			});
 
 			if (user) {
-				var isNewAccount = false;
 				const passwordValid = await bcrypt.compare(password, user.passwordHash ?? "");
 				if (!passwordValid) {
 					rateLimiter.recordAttempt(req.ip!, false);
@@ -74,7 +75,6 @@ export default function (app: App) {
 					await userService.setLastIP(user.id, req.ip);
 				}
 			} else {
-				var isNewAccount = true;
 				if (!UserService.isValidUsername(username)) {
 					return res.status(400)
 						.json({ error: "Username must be between 3 and 16 characters and cannot contain special characters." });
@@ -134,6 +134,7 @@ export default function (app: App) {
 			const authToken: AuthToken = {
 				userId: user.id,
 				sessionId: session.id,
+				role: user.role as UserRole,
 				iss: "openplace",
 				exp: Math.floor(session.expiresAt.getTime() / 1000),
 				iat: Math.floor(Date.now() / 1000)

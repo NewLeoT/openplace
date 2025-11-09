@@ -2,7 +2,7 @@
 	<div
 		class="app-container"
 		:style="{
-			'display': isLoading ? 'none' : ''
+			'visibility': isLoading ? 'hidden' : undefined
 		}"
 	>
 		<Toast />
@@ -78,7 +78,26 @@
 
 			<div class="app-overlays-profile">
 				<div v-if="isLoggedIn">
+					<OverlayBadge
+						v-if="notificationCount > 0"
+						:value="notificationCount > 99 ? '99+' : notificationCount"
+						severity="danger"
+					>
+						<Button
+							severity="secondary"
+							raised
+							rounded
+							class="app-overlays--avatar-button"
+							aria-label="Toggle user menu"
+							@click="toggleUserMenu"
+						>
+							<UserAvatar
+								:user="user"
+							/>
+						</Button>
+					</OverlayBadge>
 					<Button
+						v-else
 						severity="secondary"
 						raised
 						rounded
@@ -97,6 +116,7 @@
 						:user="user"
 						@close="isUserMenuOpen = false"
 						@logout="handleLogout"
+						@open-notifications="handleOpenNotifications"
 					/>
 				</div>
 
@@ -182,23 +202,32 @@
 			:is-open="isAboutOpen"
 			@close="isAboutOpen = false"
 		/>
+
+		<NotificationDialog
+			:is-open="isNotificationsOpen"
+			@close="isNotificationsOpen = false"
+			@count-updated="handleNotificationCountUpdated"
+		/>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import Toast from "primevue/toast";
+import OverlayBadge from "primevue/overlaybadge";
 import Map, { type LocationWithZoom } from "~/components/Map.vue";
 import PaintButton from "~/components/PaintButton.vue";
 import ColorPalette from "~/components/ColorPalette.vue";
 import UserAvatar from "~/components/UserAvatar.vue";
 import UserMenu from "~/components/UserMenu.vue";
 import PixelInfo from "~/components/PixelInfo.vue";
+import NotificationDialog from "~/components/NotificationDialog.vue";
 import { CLOSE_ZOOM_LEVEL, getPixelId, type LngLat, lngLatToTileCoords, type TileCoords, tileCoordsToLngLat, ZOOM_LEVEL } from "~/utils/coordinates";
 import { type UserProfile, useUserProfile } from "~/composables/useUserProfile";
 import { useCharges } from "~/composables/useCharges";
 import { usePaint } from "~/composables/usePaint";
 import { useErrorToast } from "~/composables/useErrorToast";
+import { useNotifications } from "~/composables/useNotifications";
 
 interface Pixel {
 	id: string;
@@ -213,7 +242,9 @@ const isPaintOpen = ref(false);
 const isSatellite = ref(false);
 const isUserMenuOpen = ref(false);
 const isPixelInfoOpen = ref(false);
+const isNotificationsOpen = ref(false);
 const isAboutOpen = ref(false);
+const notificationCount = ref(0);
 const selectedColor = ref("rgba(0,0,0,1)");
 const isEraserMode = ref(false);
 const pixels = ref<Pixel[]>([]);
@@ -242,6 +273,7 @@ const {
 const { fetchUserProfile, logout, login } = useUserProfile();
 const { submitPixels } = usePaint();
 const { showToast, handleError } = useErrorToast();
+const { getUnreadCount } = useNotifications();
 
 const isLoggedIn = computed(() => userProfile.value !== null);
 
@@ -303,6 +335,10 @@ const updateUserProfile = async () => {
 				profile.charges.max,
 				profile.charges.cooldownMs
 			);
+
+			notificationCount.value = await getUnreadCount();
+		} else {
+			notificationCount.value = 0;
 		}
 	} catch (error) {
 		console.error("Failed to fetch user profile:", error);
@@ -310,26 +346,19 @@ const updateUserProfile = async () => {
 	}
 };
 
+const handleOpenNotifications = () => {
+	isNotificationsOpen.value = true;
+	isUserMenuOpen.value = false;
+};
+
+const handleNotificationCountUpdated = (count: number) => {
+	notificationCount.value = count;
+};
+
 const handleWindowFocus = async () => {
 	const now = Date.now();
-	if (now - lastUserProfileFetch < USER_RELOAD_INTERVAL) {
-		return;
-	}
-
-	try {
-		lastUserProfileFetch = Date.now();
-		const profile = await fetchUserProfile();
-		userProfile.value = profile;
-		if (profile) {
-			initialize(
-				profile.charges.count,
-				profile.charges.max,
-				profile.charges.cooldownMs
-			);
-		}
-	} catch (error) {
-		console.error("Failed to refresh user profile on focus:", error);
-		handleError(error);
+	if (now - lastUserProfileFetch > USER_RELOAD_INTERVAL) {
+		await updateUserProfile();
 	}
 };
 
@@ -343,22 +372,8 @@ const handleBeforeUnload = (e: BeforeUnloadEvent) => {
 };
 
 onMounted(async () => {
-	try {
-		lastUserProfileFetch = Date.now();
-		userProfile.value = await fetchUserProfile();
-		if (userProfile.value) {
-			initialize(
-				userProfile.value.charges.count,
-				userProfile.value.charges.max,
-				userProfile.value.charges.cooldownMs
-			);
-		}
-	} catch (error) {
-		console.error("Failed to fetch user profile:", error);
-		handleError(error);
-	}
-
-	isLoading.value = false;
+	await updateUserProfile();
+	requestAnimationFrame(() => isLoading.value = false);
 
 	// Jump to url params
 	const params = new URLSearchParams(location.search);
@@ -713,7 +728,6 @@ const goToRandom = async () => {
 	width: 100vw;
 	height: 100dvh;
 	overflow: hidden;
-	user-select: none;
 }
 
 .map-loading {

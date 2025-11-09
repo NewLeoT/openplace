@@ -31,7 +31,8 @@ async function validateAuth(req: AuthenticatedRequest): Promise<boolean> {
 
 	req.user = {
 		id: decoded.userId,
-		sessionId: decoded.sessionId
+		sessionId: decoded.sessionId,
+		role: decoded.role ?? "user"
 	};
 
 	return true;
@@ -58,4 +59,3 @@ export async function authMiddleware(req: AuthenticatedRequest, res: Response, n
 			.json({ error: "Unauthorized", status: 401 });
 	}
 }
-

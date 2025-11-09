@@ -1,3 +1,13 @@
+:root {
+	--bs-body-bg: #f9f4f0;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bs-body-bg: #38435c;
+	}
+}
+
 @layer overrides {
 	:root {
 		--p-backdrop-filter: blur(10px);
@@ -21,6 +31,11 @@
 	.p-card,
 	.p-menu {
 		backdrop-filter: var(--p-backdrop-filter);
+	}
+
+	body {
+		user-select: none;
+		cursor: default;
 	}
 }
 

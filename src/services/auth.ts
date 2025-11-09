@@ -1,12 +1,13 @@
 import { JwtPayload } from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
-import { BanReason } from "../types";
+import { BanReason, UserRole } from "../types";
 import { normalizeCidr, parseCidr } from "cidr-tools";
 import { UserService } from "./user";
 
 export interface AuthToken extends JwtPayload {
 	userId: number;
 	sessionId: string;
+	role: UserRole;
 }
 
 export interface Ban {

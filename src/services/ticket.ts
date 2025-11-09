@@ -1,6 +1,7 @@
 import { PrismaClient, Ticket } from "@prisma/client";
 import { BanReason, TicketResolution } from "../types";
 import { UserService } from "./user";
+import { NotificationService } from "./notification";
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 
 interface ReportUserInput {
@@ -16,9 +17,11 @@ interface ReportUserInput {
 
 export class TicketService {
 	private readonly userService: UserService;
+	private readonly notificationService: NotificationService;
 
 	constructor(private prisma: PrismaClient) {
 		this.userService = new UserService(this.prisma);
+		this.notificationService = new NotificationService(this.prisma);
 	}
 
 	async reportUser(input: ReportUserInput): Promise<Ticket> {
@@ -62,6 +65,15 @@ export class TicketService {
 		case TicketResolution.Ban:
 			await this.userService.ban(ticket.reportedUserId, true, ticket.reason as BanReason);
 			break;
+		}
+
+		if (resolution !== TicketResolution.Ignore && ticket.userId !== moderatorUser) {
+			await this.notificationService.create(
+				ticket.userId,
+				"report",
+				"Update on your report",
+				"Thank you for reporting a violation of the rules. The moderators have reviewed your report and taken appropriate action."
+			);
 		}
 	}
 }

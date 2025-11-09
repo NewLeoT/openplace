@@ -83,11 +83,19 @@ const countryFlag = computed(() => {
 const emit = defineEmits<{
 	close: [];
 	logout: [];
+	openNotifications: [];
 }>();
 
 const menu = ref();
 
 const menuItems = ref([
+	{
+		label: "Notifications",
+		icon: "notifications",
+		command: () => {
+			emit("openNotifications");
+		}
+	},
 	{
 		label: "Log out",
 		command: () => {

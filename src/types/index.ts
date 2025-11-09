@@ -4,6 +4,7 @@ export interface AuthenticatedRequest extends Request {
 	user?: {
 		id: number;
 		sessionId: string;
+		role?: string;
 	};
 	file?: {
 		filename: string;
@@ -29,7 +30,8 @@ export enum UserRole {
 	User = "user",
 	Admin = "admin",
 	Moderator = "moderator",
-	GlobalModerator = "global_moderator"
+	GlobalModerator = "global_moderator",
+	Deleted = "deleted"
 }
 
 export enum BanReason {
