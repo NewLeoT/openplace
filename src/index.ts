@@ -143,7 +143,7 @@ app.use(async (req, res, next) => {
 			for (const [key, value] of res2.headers.entries()) {
 				res.set(key, value);
 			}
-			return res.send(await res2.text());
+			return res.send(Buffer.from(await res2.arrayBuffer()));
 		} catch (error) {
 			console.error("Frontend proxy error:", error);
 			return res.status(502)

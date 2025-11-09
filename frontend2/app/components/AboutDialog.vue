@@ -132,7 +132,7 @@ watch(() => props.isOpen, async (newValue) => {
 }
 
 .about-logo span {
-	font: 400 2.25rem/1 "Pixelify Sans Variable", sans-serif;
+	font: 400 2.25rem/1 "Pixelify Sans Variable", var(--bs-body-font-family);
 }
 
 @media (min-width: 375px) {
