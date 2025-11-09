@@ -2,7 +2,7 @@
 	<div
 		class="app-container"
 		:style="{
-			'display': isLoading ? 'none' : ''
+			'visibility': isLoading ? 'hidden' : undefined
 		}"
 	>
 		<Toast />
@@ -358,7 +358,7 @@ onMounted(async () => {
 		handleError(error);
 	}
 
-	isLoading.value = false;
+	requestAnimationFrame(() => isLoading.value = false);
 
 	// Show about if first visit
 	const showedInfo = Boolean(localStorage["showed:info"]);
