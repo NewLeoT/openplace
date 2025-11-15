@@ -52,6 +52,8 @@ export default function (app: App) {
 				where: { name: username }
 			});
 
+			const isNewAccount = user === null;
+
 			if (user) {
 				const passwordValid = await bcrypt.compare(password, user.passwordHash ?? "");
 				if (!passwordValid) {
