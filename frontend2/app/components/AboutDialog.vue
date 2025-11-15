@@ -82,6 +82,10 @@
 			<p class="muted">
 				<a href="https://www.openmaptiles.org/" target="_blank">© OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>
 			</p>
+
+			<p class="muted">
+				Satellite data © Google
+			</p>
 		</div>
 	</Dialog>
 </template>
@@ -129,28 +133,30 @@ watch(() => props.isOpen, async (newValue) => {
 	justify-content: center;
 	gap: 1rem;
 	margin: 0 0 3.5rem 0;
-}
-
-.about-logo span {
 	font: 400 2.25rem/1 "Pixelify Sans Variable", var(--bs-body-font-family);
 }
 
 @media (min-width: 375px) {
-	.about-logo span {
+	.about-logo {
 		font-size: 2.5rem;
 	}
 }
 
 @media (min-width: 390px) {
-	.about-logo span {
+	.about-logo {
 		font-size: 3rem;
 	}
 }
 
 @media (min-width: 500px) {
-	.about-logo span {
+	.about-logo {
 		font-size: 3.5rem;
 	}
+}
+
+.about-logo img {
+	width: auto;
+	height: 1.15em;
 }
 
 .section {

@@ -45,6 +45,11 @@ body {
 	cursor: default;
 }
 
+a {
+	// Workaround for Firefox making link underlines super thick
+	text-decoration-thickness: 1px;
+}
+
 // Blue Marble fixes
 #bm-A {
 	p,
