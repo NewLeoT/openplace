@@ -17,7 +17,7 @@ interface NotificationItem {
 
 interface NotificationPage {
 	notifications: NotificationItem[];
-	nextCursor: null;
+	nextCursor?: number;
 }
 
 export class NotificationService {
@@ -143,8 +143,8 @@ export class NotificationService {
 		allNotifications.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
 		return {
-			notifications: allNotifications.slice(0, limit),
-			nextCursor: null
+			notifications: allNotifications.slice(0, limit)
+			// nextCursor: null
 		};
 	}
 
