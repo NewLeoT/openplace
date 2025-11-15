@@ -272,14 +272,36 @@ export class RegionService {
 	}
 
 	public async findRegionsByQuery(query: string): Promise<Point[]> {
+		const queryLowercase = query.toLowerCase();
 		const results = await this.prisma.region.findMany({
 			where: {
-				name: { contains: query }
+				name: { contains: queryLowercase }
 			},
-			take: 5
+			take: 20
 		});
 
-		return results.map(item => ({
+		// Sort by relevance: exact match -> starts with -> contains
+		const sorted = results.sort((a, b) => {
+			const aName = a.name.toLowerCase();
+			const bName = b.name.toLowerCase();
+
+			const aExact = aName === queryLowercase ? 0 : 1;
+			const bExact = bName === queryLowercase ? 0 : 1;
+			if (aExact !== bExact) {
+				return aExact - bExact;
+			}
+
+			const aStarts = aName.startsWith(queryLowercase) ? 0 : 1;
+			const bStarts = bName.startsWith(queryLowercase) ? 0 : 1;
+			if (aStarts !== bStarts) {
+				return aStarts - bStarts;
+			}
+
+			return aName.length - bName.length;
+		})
+			.slice(0, 10);
+
+		return sorted.map(item => ({
 			latitude: item.latitude,
 			longitude: item.longitude,
 			id: item.id,
