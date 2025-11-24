@@ -2,10 +2,7 @@
 
 <p align="center"><strong>Terjemahan</strong> v4.1</p>
 <p align="center">
-    <a href="../../README.md"><img src="https://flagcdn.com/256x192/us.png" width="48" alt="United States Flag"></a>    
-    <a href="../de/LIESMICH.md"><img src="https://flagcdn.com/256x192/de.png" width="48" alt="German Flag"></a>
-    <a href="../fr/LISEZMOI.md"><img src="https://flagcdn.com/256x192/fr.png" width="48" alt="French Flag"></a>
-  &nbsp;
+    <a href="../../README.md"><img src="https://flagcdn.com/256x192/us.png" width="48" alt="United States Flag"></a>
 
 ## 
 Openplace (format huruf kecil) adalah backend sumber terbuka gratis yang tidak resmi untuk [wplace.](https://wplace.live) Kami bertujuan untuk memberikan kebebasan dan fleksibilitas bagi semua pengguna agar dapat menciptakan pengalaman wplace pribadi mereka sendiri, baik untuk diri mereka sendiri, teman-teman mereka, maupun komunitas mereka.

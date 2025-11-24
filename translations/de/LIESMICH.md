@@ -2,10 +2,7 @@
 
 <p align="center"><strong>Übersetzungen</strong> v4.1</p>
 <p align="center">
-    <a href="../../README.md"><img src="https://flagcdn.com/256x192/us.png" width="48" alt="United States Flag"></a>    
-    <a href="../fr/LISEZMOI.md"><img src="https://flagcdn.com/256x192/fr.png" width="48" alt="French Flag"></a>
-    <a href="../id/README.md"><img src="https://flagcdn.com/256x192/id.png" width="48" alt="Indonesia Flag"></a>
-
+    <a href="../../README.md"><img src="https://flagcdn.com/256x192/us.png" width="48" alt="United States Flag"></a>
 ## 
 
 Openplace (kleingeschrieben) ist ein inoffizielles Open-Source-Backend für [wplace.](https://wplace.live) Unser Ziel ist es, jedem Benutzer die Freiheit zu geben, seine eigene private Wplace-Erfahrung für sich selber, seine Freunde oder sogar für seine Gemeinschaft zu machen.

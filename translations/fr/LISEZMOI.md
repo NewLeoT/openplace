@@ -1,12 +1,8 @@
 # ![openplace](../../banner.png "openplace banner")
 
-<p align="center"><strong>Translations</strong> v5.2</p>
+<p align="center"><strong>Translations</strong> v5.3</p>
 <p align="center">
-    <a href="../../README.md"><img src="https://flagcdn.com/256x192/us.png" width="48" alt="United States Flag"></a>    
-    <a href="../de/LIESMICH.md"><img src="https://flagcdn.com/256x192/de.png" width="48" alt="German Flag"></a>
-    <a href="../id/README.md"><img src="https://flagcdn.com/256x192/id.png" width="48" alt="Indonesia Flag"></a>
-    <a href="../uk/ПРОЧИТАЙМЕНЕ.md"><img src="https://flagcdn.com/256x192/ua.png" width="48" alt="Ukraine Flag"></a>
-  &nbsp;
+    <a href="../../README.md"><img src="https://flagcdn.com/256x192/us.png" width="48" alt="United States Flag"></a>
 
 ## 
 
@@ -54,20 +50,30 @@ Si vous ne connaissez pas votre code ISO, vous pouvez le vérifier [ici](https:/
 Copiez les fichiers anglais du dossier `translations` ainsi que le fichier principal `README.md` dans le dossier que vous venez de créer.
 Vous devriez maintenant avoir quatre fichiers : `README.md` et trois fichiers d’installation au format markdown (`.md`).
 
-### Ajouter le drapeau de votre pays en haut de chaque README
+### Ajouter le drapeau approprié aux deux README
 
-En haut de **chaque** README (dans toutes les langues), ajoutez une nouvelle ligne affichant le drapeau de la langue que vous traduisez.
-Vous devez ajouter un drapeau qui renvoie à vos fichiers traduits. Utilisez le modèle suivant :
+Lors de la création d’une nouvelle traduction, vous devez mettre à jour **deux** fichiers README :
+
+#### 1. **README original en anglais**
+
+Ajoutez **uniquement le drapeau du pays/de la langue vers lequel vous traduisez** en haut du fichier.
+Ce drapeau doit pointer vers votre nouveau README traduit.
+
+Utilisez ce modèle :
 
 ```html
 <a href="translations/LANGUAGE_ISO_CODE/NAME_OF_YOUR_README.md"><img src="https://flagcdn.com/256x192/LANGUAGE_ISO_CODE.png" width="48" alt="Drapeau de NAME_OF_COUNTRY"></a>
 ```
 
-Remplacez les éléments entre guillemets par les valeurs correctes correspondant à votre langue.
+Remplacez les champs par le code ISO et le nom du pays correspondant à votre traduction.
 
-> [AVERTISSEMENT ⚠️]
-> Attention ! Chaque README doit renvoyer directement à tous les autres READMEs.
-> Les drapeaux doivent rester dans le même ordre (alphabétique selon leurs codes ISO) sauf pour l’anglais, qui apparaît toujours en premier (par exemple : `en`, `de`, `es`, `fr`).
+#### 2. **Votre README traduit**
+
+En haut de votre README traduit, ajoutez **uniquement le drapeau américain**, qui doit renvoyer vers le README anglais.
+
+> [ATTENTION ⚠️]
+> Les drapeaux dans le README anglais doivent rester classés par ordre alphabétique selon leur code ISO.
+
 
 ### Mettre à jour les liens dans la section Démarrage
 

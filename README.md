@@ -1,6 +1,6 @@
 # ![openplace](banner.png "openplace banner")
 
-<p align="center"><strong>Translations</strong> v5.2</p>
+<p align="center"><strong>Translations</strong> v5.3</p>
 <p align="center">
     <a href="translations/de/LIESMICH.md"><img src="https://flagcdn.com/256x192/de.png" width="48" alt="German Flag"></a>
     <a href="translations/fr/LISEZMOI.md"><img src="https://flagcdn.com/256x192/fr.png" width="48" alt="French Flag"></a>
@@ -56,20 +56,29 @@ If you’re unsure what your ISO code is, you can check it [here](https://gist.g
 Copy the English files from the `translations` folder and the main `README.md` into the folder you just created.
 You should now have four files: `README.md` and three installation markdown (`.md`) files.
 
-### Add your country flag at the top of the English and your new translation's README
+### Add the correct flag to both README
 
-At the top of **both** README, add a new line that displays the flag of the language you are translating into.
-You need to add a flag that links to your translated files. Use the following as a template:
+When creating a new translation, you must update **two** README files:
+
+#### 1. **Original English README**
+
+Add **only the flag of the country/language you are translating into** at the top.
+This flag must link to your new translated README.
+
+Use this template:
 
 ```html
 <a href="translations/LANGUAGE_ISO_CODE/NAME_OF_YOUR_README.md"><img src="https://flagcdn.com/256x192/LANGUAGE_ISO_CODE.png" width="48" alt="NAME_OF_COUNTRY Flag"></a>
 ```
 
-Replace the placeholders with the correct values for your language.
+Replace the placeholders with the ISO code and country name for your translation.
+
+#### 2. **Your Translated README**
+
+At the top of your translated README, add **only the American flag**, linking back to the English README.
 
 > [WARNING ⚠️]
-> Be careful! Every README should link directly to all other READMEs.
-> Flags must remain in the same order (alphabetical according to their ISO codes) except for English, which always appears first (e.g., `en`, `de`, `es`, `fr`).
+> Flags in the English README must stay in alphabetical order by ISO code.
 
 ### Update links in the Getting Started section
 
