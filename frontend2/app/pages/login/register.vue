@@ -1,9 +1,5 @@
 <template>
-	<form
-		class="form"
-		:disabled="loading ? 'disabled' : null"
-		@submit="submit"
-	>
+	<form class="form" :disabled="loading ? 'disabled' : null" @submit="submit">
 		<h2 class="head">Welcome aboard!</h2>
 
 		<InputText
@@ -27,19 +23,12 @@
 			:disabled="loading"
 		/>
 
-		<Message
-			v-if="errorMessage"
-			severity="error"
-		>
+		<Message v-if="errorMessage" severity="error">
 			{{ errorMessage }}
 		</Message>
 
 		<div class="buttons-container">
-			<Button
-				severity="primary"
-				type="submit"
-				:disabled="loading"
-			>
+			<Button severity="primary" type="submit" :disabled="loading">
 				Register
 			</Button>
 		</div>
@@ -109,20 +98,12 @@ const submit = async (e: Event) => {
 
 		if (success) {
 			const returnTo = route.query.r as string;
-			if (isNewAccount) {
-				const url = new URL("/login/discord", location.origin);
-				url.searchParams.set("for", "welcome");
-				if (returnTo) {
-					url.searchParams.set("r", returnTo);
-				}
-				router.push(url);
-			} else {
-				if (!returnTo || returnTo === "/") {
-					location.href = "/";
-				} else {
-					router.push(returnTo ?? "/");
-				}
+			const url = new URL("/login/discord", location.origin);
+			url.searchParams.set("for", "welcome");
+			if (returnTo) {
+				url.searchParams.set("r", returnTo);
 			}
+			router.push(url.pathname + url.search);
 		} else {
 			throw new Error(error);
 		}

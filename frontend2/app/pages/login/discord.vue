@@ -21,7 +21,7 @@
 				severity="success"
 			>
 				<strong v-if="boost === 'booster'">
-					Thanks for boosting our server!
+					Thank you for contributing to our server!
 				</strong>
 
 				<strong v-else-if="boost === 'active'">
