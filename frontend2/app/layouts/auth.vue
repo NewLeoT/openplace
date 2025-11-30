@@ -14,7 +14,6 @@
 							width="64"
 							height="64"
 						>
-						<span>openplace</span>
 					</a>
 				</template>
 
@@ -80,8 +79,7 @@ const resetCanvas = () => {
 
 	for (let i = 0; i < width; i++) {
 		for (let j = 0; j < height; j++) {
-			const color = palette[Math.floor(Math.random() * palette.length)]!;
-			ctx.fillStyle = `rgba(${color.rgba.join(",")})`;
+			ctx.fillStyle = `#4169e1`;
 			ctx.fillRect(i, j, 1, 1);
 		}
 	}
@@ -106,7 +104,7 @@ const canvasTick = () => {
 	const width = bgCanvas.value.width;
 	const height = bgCanvas.value.height;
 
-	for (let i = 0; i < 20; i++) {
+	for (let i = 0; i < 5; i++) {
 		const x = Math.floor(Math.random() * width);
 		const y = Math.floor(Math.random() * height);
 		const color = palette[Math.floor(Math.random() * palette.length)]!;
@@ -114,7 +112,7 @@ const canvasTick = () => {
 		ctx.fillRect(x, y, 1, 1);
 	}
 
-	tickTimer = setTimeout(canvasTick, 100);
+	tickTimer = setTimeout(canvasTick, 25);
 };
 </script>
 
@@ -128,7 +126,7 @@ const canvasTick = () => {
 	width: 100%;
 	height: 100%;
 	z-index: 1;
-	opacity: 0.25;
+	opacity: 0.75;
 	image-rendering: pixelated;
 	user-select: none;
 	pointer-events: none;

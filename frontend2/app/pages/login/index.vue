@@ -4,7 +4,7 @@
 		:disabled="loading ? 'disabled' : null"
 		@submit="submit"
 	>
-		<h2 class="head">Welcome!</h2>
+		<h2 class="head">Great to see you!</h2>
 
 		<InputText
 			v-model="username"
@@ -50,7 +50,7 @@
 
 		<div class="reset-link">
 			New to openplace?
-			<RouterLink :to="registerURL">
+			<RouterLink :to="rulesURL">
 				Register
 			</RouterLink>
 			<br>
@@ -87,6 +87,7 @@ const username = ref("");
 const password = ref("");
 const errorMessage = ref<string | null>(null);
 const registerURL = ref("/login/register");
+const rulesURL = ref("/login/rules");
 const resetURL = ref("/login/reset");
 
 onMounted(() => {
