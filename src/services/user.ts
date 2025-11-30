@@ -8,7 +8,7 @@ import { ValidationError } from "../utils/error.js";
 export const COOLDOWN_MS = Number.parseInt(process.env["COOLDOWN_MS"] ?? "") || 30_000;
 export const ACTIVE_COOLDOWN_MS = Number.parseInt(process.env["ACTIVE_COOLDOWN_MS"] ?? "") || 15_000;
 export const BOOSTER_COOLDOWN_MS = Number.parseInt(process.env["BOOSTER_COOLDOWN_MS"] ?? "") || 10_000;
-export const SPECIAL_COOLDOWN_MS = Number.parseInt(process.env["SPECIAL_COOLDOWN_MS"] ?? "") || 5_000;
+export const SPECIAL_COOLDOWN_MS = Number.parseInt(process.env["SPECIAL_COOLDOWN_MS"] ?? "") || 5000;
 export const COOLDOWN_OVERRIDE_FOR_SPECIAL = (process.env["COOLDOWN_OVERRIDE_FOR_SPECIAL"] ?? "false") === "true";
 
 export interface UpdateUserInput {
@@ -85,6 +85,19 @@ export class UserService {
 		const flagsBitmap = Buffer.from(user.flagsBitmap ?? [0])
 			.toString("base64");
 
+		let cooldownBoost: string | null = null;
+		switch (user.chargesCooldownMs) {
+		case ACTIVE_COOLDOWN_MS:
+			cooldownBoost = "active";
+			break;
+		case BOOSTER_COOLDOWN_MS:
+			cooldownBoost = "booster";
+			break;
+		case SPECIAL_COOLDOWN_MS:
+			cooldownBoost = "special";
+			break;
+		}
+
 		return {
 			...config,
 			id: user.id,
@@ -99,7 +112,8 @@ export class UserService {
 			charges: {
 				cooldownMs: user.chargesCooldownMs,
 				count: user.currentCharges,
-				max: user.maxCharges
+				max: user.maxCharges,
+				boost: cooldownBoost
 			},
 			droplets: user.droplets,
 			equippedFlag: user.equippedFlag,
@@ -240,13 +254,14 @@ export class UserService {
 					isolationLevel: "ReadCommitted"
 				});
 				break;
-			} catch (error: any) {
+			} catch (error: unknown) {
+				const error2 = error as { message?: string; code?: string; };
 				retries--;
 				const isRetryableError = (
-					error.message?.includes("deadlock") ||
-					error.message?.includes("timeout") ||
-					error.code === "P2034" ||
-					error.code === "P2024"
+					error2.message?.includes("deadlock") ||
+					error2.message?.includes("timeout") ||
+					error2.code === "P2034" ||
+					error2.code === "P2024"
 				);
 
 				if (isRetryableError && retries > 0) {

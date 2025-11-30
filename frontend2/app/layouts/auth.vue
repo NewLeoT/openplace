@@ -7,7 +7,7 @@
 				<template #header>
 					<a
 						:href="returnTo ?? '/'"
-						class="about-logo">
+						class="logo">
 						<img
 							src="/img/logo-512x512.png"
 							alt=""
@@ -144,48 +144,32 @@ const canvasTick = () => {
 	width: 100%;
 	max-width: 400px;
 	margin: auto;
-	box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
 }
 
-.about-logo {
+.logo {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	gap: 1rem;
 	margin: 2rem 0 1.25rem 0;
-	font: 400 2.25rem/1 "Pixelify Sans Variable", var(--bs-body-font-family);
 	color: inherit;
 	text-decoration: none;
 }
 
-@media (min-width: 375px) {
-	.about-logo {
-		font-size: 2.5rem;
-	}
-}
-
-@media (min-width: 390px) {
-	.about-logo {
-		font-size: 3rem;
-	}
-}
-
-@media (min-width: 500px) {
-	.about-logo {
-		font-size: 2.75rem;
-	}
-}
-
-.about-logo img {
-	width: auto;
-	height: 1.15em;
+.logo img {
+	width: 3.15rem;
+	height: 3.15rem;
 }
 
 :deep(.form) {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
+}
+
+:deep(.form > p) {
+	margin-block: 0;
 }
 
 :deep(.head) {

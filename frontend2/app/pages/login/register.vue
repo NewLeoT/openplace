@@ -108,7 +108,8 @@ const submit = async (e: Event) => {
 		if (success) {
 			const returnTo = route.query.r as string;
 			if (isNewAccount) {
-				const url = new URL("/welcome", location.origin);
+				const url = new URL("/login/discord", location.origin);
+				url.searchParams.set("for", "welcome");
 				if (returnTo) {
 					url.searchParams.set("r", returnTo);
 				}

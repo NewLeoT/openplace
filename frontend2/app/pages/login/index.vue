@@ -95,6 +95,7 @@ onMounted(() => {
 	if (returnTo) {
 		const params = new URLSearchParams([["r", returnTo]]);
 		registerURL.value = `/login/register?${params.toString()}`;
+		rulesURL.value = `/login/rules?${params.toString()}`;
 		resetURL.value = `/login/reset?${params.toString()}`;
 	}
 });

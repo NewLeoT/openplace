@@ -1,7 +1,8 @@
 export interface UserProfile {
 	id: number;
 	name: string;
-	discord: string;
+	discord: string | null;
+	discordUserId: string | null;
 	country: number;
 	banned: boolean;
 	verified: boolean;
@@ -11,6 +12,7 @@ export interface UserProfile {
 		cooldownMs: number;
 		count: number;
 		max: number;
+		boost: string | null;
 	};
 	droplets: number;
 	equippedFlag: number | null;

@@ -1,6 +1,6 @@
 <template>
-	<form class="form" @submit="submit">
-		<h2 class="head">First, let's go over some rules..</h2>
+	<div class="form">
+		<h2 class="head">First, let’s go over some rules..</h2>
 		<p>These rules are to ensure you have a safe and enjoyable experience on openplace.</p>
 
 		<div class="section">
@@ -36,20 +36,27 @@
 		</div>
 
 		<div class="buttons-container">
-			<Button asChild v-slot="slotProps" severity="primary" type="submit" :disabled="loading">
-				<RouterLink to="/login/register" :class="slotProps.class" :style="{ 'text-decoration': 'none' }">Continue</RouterLink>
+			<Button
+				v-slot="slotProps"
+				as-child
+				severity="primary"
+				type="submit"
+				:disabled="loading"
+			>
+				<RouterLink
+					:to="registerURL"
+					:class="slotProps.class"
+					:style="{ 'text-decoration': 'none' }"
+				>
+					Continue
+				</RouterLink>
 			</Button>
 		</div>
-	</form>
+	</div>
 </template>
 
 <script setup lang="ts">
-import { register } from "module";
 import Button from "primevue/button";
-import Message from "primevue/message";
-import { useErrorToast } from "~/composables/useErrorToast";
-
-const { getErrorMessage } = useErrorToast();
 
 definePageMeta({
 	layout: "auth"
@@ -58,42 +65,16 @@ definePageMeta({
 const route = useRoute();
 
 const loading = ref(false);
-const username = ref("");
-const success = ref(false);
-const errorMessage = ref<string | null>(null);
-const loginURL = ref("/login");
+const registerURL = ref("/login/register");
 
 onMounted(() => {
 	const returnTo = route.query.r as string;
 	if (returnTo) {
 		const params = new URLSearchParams([["r", returnTo]]);
-		loginURL.value = `/login?${params.toString()}`;
+		registerURL.value = `/login/register?${params.toString()}`;
 	}
 });
 
-const submit = async (e: Event) => {
-	e.preventDefault();
-	loading.value = true;
-	success.value = false;
-	errorMessage.value = null;
-
-	try {
-		const config = useRuntimeConfig();
-		await $fetch(`${config.public.backendUrl}/auth/request-password-reset`, {
-			method: "POST",
-			credentials: "include",
-			body: {
-				username: username.value
-			}
-		});
-
-		success.value = true;
-	} catch (error: unknown) {
-		errorMessage.value = getErrorMessage(error);
-	}
-
-	loading.value = false;
-};
 interface Rules {
 	isMultiAccountAllowed: boolean;
 	isOffensiveContentAllowed: boolean;

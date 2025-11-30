@@ -7,8 +7,6 @@ import DiscordService from "../services/discord.js";
 import { createErrorResponse, HTTP_STATUS } from "../utils/response.js";
 import { AuthenticatedRequest } from "../types/index.js";
 import { discordBot } from "../discord/bot.js";
-import { ACTIVE_COOLDOWN_MS, BOOSTER_COOLDOWN_MS } from "../services/user.js";
-import { prisma } from "../config/database.js";
 
 const discordService = new DiscordService();
 
@@ -25,16 +23,10 @@ setInterval(() => {
 }, 10 * 60 * 1000);
 
 export default function (app: App) {
-	app.get("/discord/link", optionalAuthMiddleware, async (req: AuthenticatedRequest, res) => {
-		if (!req.user) {
-			return res.redirect("/login");
-		}
+	app.get("/discord/link", (_req, res) => res.redirect("/login/discord"));
 
-		const html = await fs.readFile("./src/public/discord-link.html", "utf8");
-		res.setHeader("Content-Type", "text/html");
-		return res.send(html);
-	});
-	
+	app.get("/discord/unlink", (_req, res) => res.redirect("/login/discord"));
+
 	app.get("/registration/link", optionalAuthMiddleware, async (req: AuthenticatedRequest, res) => {
 		if (!req.user) {
 			return res.redirect("/login");
@@ -45,22 +37,6 @@ export default function (app: App) {
 		return res.send(html);
 	});
 
-	app.get("/discord/unlink", optionalAuthMiddleware, async (req: AuthenticatedRequest, res) => {
-		if (!req.user) {
-			return res.redirect("/login");
-		}
-
-		const html = await fs.readFile("./src/public/discord-unlink.html", "utf8");
-		res.setHeader("Content-Type", "text/html");
-		return res.send(html);
-	});
-
-	app.get("/account.css", async (_req, res) => {
-		const css = await fs.readFile("./src/public/account.css", "utf8");
-		res.setHeader("Content-Type", "text/css");
-		return res.send(css);
-	});
-
 	app.get("/discord/configured", authMiddleware, (_req, res) => {
 		if (!discordService.isConfigured) {
 			return res.status(503)
@@ -69,7 +45,7 @@ export default function (app: App) {
 		return res.json({ configured: true });
 	});
 
-	app.get("/discord/auth-url", authMiddleware, async (req: AuthenticatedRequest, res) => {
+	app.post("/discord/auth-url", authMiddleware, async (req: AuthenticatedRequest, res) => {
 		try {
 			if (!discordService.isConfigured) {
 				return res.status(503)
@@ -104,13 +80,13 @@ export default function (app: App) {
 			if (!code || typeof code !== "string") {
 				// TODO: Cleanup
 				return res.status(HTTP_STATUS.BAD_REQUEST)
-					.send("<h1>Error: Missing authorization code</h1><a href=\"/discord/link\">Try again</a>");
+					.send("<h1>Error: Missing authorization code</h1><a href=\"/auth/discord\">Try again</a>");
 			}
 
 			if (!state || typeof state !== "string") {
 				// TODO: Cleanup
 				return res.status(HTTP_STATUS.BAD_REQUEST)
-					.send("<h1>Error: Missing state parameter</h1><a href=\"/discord/link\">Try again</a>");
+					.send("<h1>Error: Missing state parameter</h1><a href=\"/auth/discord\">Try again</a>");
 			}
 
 			const stateData = stateStore.get(state);
@@ -118,86 +94,21 @@ export default function (app: App) {
 			if (!stateData || stateData.userId !== req.user!.id || stateData.expiresAt < Date.now()) {
 				// TODO: Cleanup
 				return res.status(HTTP_STATUS.BAD_REQUEST)
-					.send("<h1>Error: Invalid or expired state token</h1><a href=\"/discord/link\">Try again</a>");
+					.send("<h1>Error: Invalid or expired state token</h1><a href=\"/auth/discord\">Try again</a>");
 			}
 
 			const accessToken = await discordService.exchangeCodeForToken(code);
 			const discordUser = await discordService.getDiscordUser(accessToken);
 			await discordService.linkDiscordAccount(stateData.userId, discordUser);
-
-			const cooldown = await discordBot.updateUserId(discordUser.id);
-
-			let cooldownMessage = "";
-			if (cooldown) {
-				const seconds = Math.floor(cooldown / 1000);
-				if (cooldown === BOOSTER_COOLDOWN_MS) {
-					cooldownMessage = `<p><strong>Thanks for boosting our server!</strong> Your paint cooldown has been set to ${seconds} seconds.</p>`;
-				} else if (cooldown === ACTIVE_COOLDOWN_MS) {
-					cooldownMessage = `<p><strong>Thanks for being an active server member!</strong> Your paint cooldown has been set to ${seconds} seconds.</p>`;
-				} else {
-					cooldownMessage = `<p>You’re not eligible for any boosts at this time. You will receive a notification when you become eligible.</p>`;
-				}
-			} else {
-				cooldownMessage = `<p>Unable to check Discord roles. Your cooldown will be updated when the bot syncs.</p>`;
-			}
-
-			// TODO: Cleanup
-			return res.send(`
-				<html>
-				<head>
-					<title>Discord Linked - openplace</title>
-					<link rel="stylesheet" href="/account.css">
-				</head>
-				<body>
-					<div class="login-form">
-						<h1>Success!</h1>
-						<p>Your Discord account (${discordUser.username}) has been linked.</p>
-						${cooldownMessage}
-						<button class="skipButton">Back to Home</button>
-					</div>
-					<script>
-								// idk why the skip button is throwing a fit with the event listener sooooo this is gonna have to do ig - toby
-								function attachSkipListeners() {
-									document.querySelectorAll('.skipButton').forEach(btn => {
-										btn.onclick = async (event) => {
-											try {
-												btn.disabled = true;
-												btn.textContent = 'Redirecting...';
-												window.location.href = '/';
-											} catch (error) {
-												errorDiv.textContent = error.message;
-												btn.disabled = false;
-												btn.textContent = 'Not now';
-											}
-										};
-									});
-								}
-
-								attachSkipListeners();
-					</script>
-				</body>
-				</html>
-			`);
+			await discordBot.updateUserId(discordUser.id);
+			res.redirect("/login/discord");
 		} catch (error) {
 			console.error("Discord callback error:", error);
 
-			// TODO: Cleanup
-			return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-				.send(`
-					<html>
-					<head>
-						<title>Error - openplace</title>
-						<link rel="stylesheet" href="/account.css">
-					</head>
-					<body>
-						<div class="login-form">
-							<h1>Error</h1>
-							<p>${(error as Error).message || "Failed to link Discord account"}</p>
-							<a href="/discord/link">Try again</a>
-						</div>
-					</body>
-					</html>
-				`);
+			const params = new URLSearchParams([
+				["error", (error as Error).message || "Failed to link Discord account"]
+			]);
+			res.redirect(`/login/discord?${params.toString()}`);
 		}
 	});
 
