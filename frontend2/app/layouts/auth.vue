@@ -72,13 +72,14 @@ const resetCanvas = () => {
 		return;
 	}
 
+	const oldImage = ctx.getImageData(0, 0, bgCanvas.value.width, bgCanvas.value.height);
+
 	const width = bgCanvas.value.clientWidth / 10;
 	const height = Math.floor((bgCanvas.value.clientHeight * width) / bgCanvas.value.clientWidth);
 	bgCanvas.value.width = width;
 	bgCanvas.value.height = height;
 
-	ctx.fillStyle = "#4169e1";
-	ctx.fillRect(0, 0, width, height);
+	ctx.putImageData(oldImage, 0, 0);
 
 	if (tickTimer) {
 		clearTimeout(tickTimer);
@@ -123,6 +124,7 @@ const canvasTick = () => {
 	height: 100%;
 	z-index: 1;
 	opacity: 0.75;
+	background: #4169e1;
 	image-rendering: pixelated;
 	user-select: none;
 	pointer-events: none;
