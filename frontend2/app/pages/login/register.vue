@@ -38,23 +38,18 @@
 				type="submit"
 				:disabled="loading"
 			>
-				Log in
+				Register
 			</Button>
 		</div>
 
 		<div class="agreement">
-			By logging in, you agree to the rules set by the owner of this instance.
+			By registering, you agree to the rules set by the owner of this instance.
 		</div>
 
 		<div class="reset-link">
-			New to openplace?
-			<RouterLink :to="registerURL">
-				Register
-			</RouterLink>
-			<br>
-			Forgot your password?
-			<RouterLink :to="resetURL">
-				Reset password
+			Already have an account?
+			<RouterLink :to="loginURL">
+				Log in
 			</RouterLink>
 		</div>
 	</form>
@@ -84,15 +79,13 @@ const loading = ref(false);
 const username = ref("");
 const password = ref("");
 const errorMessage = ref<string | null>(null);
-const registerURL = ref("/login/register");
-const resetURL = ref("/login/reset");
+const loginURL = ref("/login");
 
 onMounted(() => {
 	const returnTo = route.query.r as string;
 	if (returnTo) {
 		const params = new URLSearchParams([["r", returnTo]]);
-		registerURL.value = `/login/register?${params.toString()}`;
-		resetURL.value = `/login/reset?${params.toString()}`;
+		loginURL.value = `/login?${params.toString()}`;
 	}
 });
 
