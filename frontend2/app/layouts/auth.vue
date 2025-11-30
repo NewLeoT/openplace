@@ -77,12 +77,8 @@ const resetCanvas = () => {
 	bgCanvas.value.width = width;
 	bgCanvas.value.height = height;
 
-	for (let i = 0; i < width; i++) {
-		for (let j = 0; j < height; j++) {
-			ctx.fillStyle = `#4169e1`;
-			ctx.fillRect(i, j, 1, 1);
-		}
-	}
+	ctx.fillStyle = "#4169e1";
+	ctx.fillRect(0, 0, width, height);
 
 	if (tickTimer) {
 		clearTimeout(tickTimer);
