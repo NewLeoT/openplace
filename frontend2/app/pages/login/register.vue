@@ -10,6 +10,7 @@
 			v-model="username"
 			placeholder="Username"
 			aria-label="Username"
+			autocomplete="username"
 			required
 			autofocus
 			:disabled="loading"
@@ -20,6 +21,7 @@
 			placeholder="Password"
 			aria-label="Password"
 			type="password"
+			autocomplete="new-password"
 			required
 			minlength="8"
 			:disabled="loading"
