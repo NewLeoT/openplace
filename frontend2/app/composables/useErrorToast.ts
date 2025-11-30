@@ -20,7 +20,7 @@ export const useErrorToast = () => {
 		toast.add(lastToast.value);
 	};
 
-	const handleError = (error: unknown) => {
+	const getErrorMessage = (error: unknown) => {
 		let summary = error instanceof Error ? error.message : String(error);
 
 		// If this is a fetch error, use message from the server if it exists
@@ -31,7 +31,19 @@ export const useErrorToast = () => {
 			} else if (status >= 500 && status < 600) {
 				summary = "The server is temporarily unavailable. Try again shortly.";
 			} else {
-				summary = `Unknown server error. Try again later.\n${summary}`;
+				switch (status) {
+				case 429:
+					summary = "Try again in a minute, rate limit exceeded";
+					break;
+
+				case 403:
+					summary = "You have been banned.";
+					break;
+
+				default:
+					summary = `Unknown server error. Try again later.\n${summary}`;
+					break;
+				}
 			}
 
 			const data = error.data as { error?: string; };
@@ -40,15 +52,20 @@ export const useErrorToast = () => {
 			}
 		}
 
+		return summary;
+	};
+
+	const handleError = (error: unknown) => {
 		showToast({
 			severity: "error",
-			summary,
+			summary: getErrorMessage(error),
 			life: 5000
 		});
 	};
 
 	return {
 		showToast,
+		getErrorMessage,
 		handleError
 	};
 };

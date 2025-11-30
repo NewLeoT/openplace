@@ -4,7 +4,6 @@ import { JWT_SECRET } from "../config/auth.js";
 import { prisma } from "../config/database.js";
 import { authMiddleware } from "../middleware/auth.js";
 import jwt from "jsonwebtoken";
-import fs from "fs/promises";
 import { COOLDOWN_MS, UserService } from "../services/user.js";
 import { AuthenticatedRequest, BanReason, UserRole } from "../types/index.js";
 import { AuthService, AuthToken } from "../services/auth.js";
@@ -25,12 +24,6 @@ const authService = new AuthService(prisma);
 // TODO: Refactor into service
 // eslint-disable-next-line max-lines-per-function
 export default function (app: App) {
-	app.get("/login", async (_req, res) => {
-		const loginHtml = await fs.readFile("./src/public/login.html", "utf8");
-		res.setHeader("Content-Type", "text/html");
-		return res.send(loginHtml);
-	});
-
 	app.post("/login", async (req, res) => {
 		try {
 			const { username, password } = req.body;
@@ -271,7 +264,7 @@ export default function (app: App) {
 			const params = new URLSearchParams([
 				["token", resetToken.id]
 			]);
-			const resetUrl = `[Reset your password](${process.env["EXTERNAL_URL"]}/login?${params.toString()})`;
+			const resetUrl = `[Reset your password](${process.env["EXTERNAL_URL"]}/login/set-password?${params.toString()})`;
 			const message = `### Password Reset Requested
 
 A password reset was requested for your openplace account. If you requested this, click this link to reset your password:

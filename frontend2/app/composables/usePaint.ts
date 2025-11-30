@@ -1,5 +1,5 @@
 import type { TileCoords } from "~/utils/coordinates";
-import { palette } from "../../utils/palette";
+import { palette } from "~/utils/palette";
 
 interface PaintPixel {
 	tileCoords: TileCoords;

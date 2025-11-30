@@ -56,7 +56,7 @@ export const useUserProfile = () => {
 		}
 	};
 
-	const logout = async (): Promise<void> => {
+	const logOut = async (): Promise<void> => {
 		return await $fetch(`${baseURL}/logout`, {
 			method: "POST",
 			credentials: "include",
@@ -66,11 +66,17 @@ export const useUserProfile = () => {
 		});
 	};
 
-	const login = () => location.href = `${baseURL}/login`;
+	const logIn = () => {
+		const params = new URLSearchParams();
+		if (location.href !== "/") {
+			params.set("r", location.href);
+		}
+		location.href = `/login?${params.toString()}`;
+	};
 
 	return {
 		fetchUserProfile,
-		logout,
-		login
+		logOut,
+		logIn
 	};
 };

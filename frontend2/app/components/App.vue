@@ -115,7 +115,7 @@
 						:is-open="isUserMenuOpen"
 						:user="user"
 						@close="isUserMenuOpen = false"
-						@logout="handleLogout"
+						@logout="handleLogOut"
 						@open-notifications="handleOpenNotifications"
 					/>
 				</div>
@@ -126,7 +126,7 @@
 					raised
 					rounded
 					aria-label="Log in"
-					@click="handleLogin"
+					@click="handleLogIn"
 				>
 					Log in
 				</Button>
@@ -270,7 +270,7 @@ const {
 	commitPixels
 } = useCharges();
 
-const { fetchUserProfile, logout, login } = useUserProfile();
+const { fetchUserProfile, logIn, logOut } = useUserProfile();
 const { submitPixels } = usePaint();
 const { showToast, handleError } = useErrorToast();
 const { getUnreadCount } = useNotifications();
@@ -638,12 +638,12 @@ const handleSubmitPixels = async () => {
 	updateUserProfile();
 };
 
-const handleLogin = () => {
-	login();
+const handleLogIn = () => {
+	logIn();
 };
 
-const handleLogout = async () => {
-	await logout();
+const handleLogOut = async () => {
+	await logOut();
 	location.reload();
 };
 

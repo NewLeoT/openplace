@@ -136,12 +136,13 @@ checkrobots(app);
 const FRONTEND_HOST = process.env["FRONTEND_HOST"] ?? "localhost";
 const FRONTEND_PORT = process.env["FRONTEND_PORT"] ?? "3001";
 app.use(async (req, res, next) => {
-	if (req.path.startsWith("/beta") || req.path.startsWith("/_nuxt") || req.path.startsWith("/__nuxt")) {
+	if (req.path.startsWith("/login") || req.path.startsWith("/beta") || req.path.startsWith("/_nuxt") || req.path.startsWith("/__nuxt")) {
 		try {
+			const method = req.method ?? "GET";
 			const res2 = await fetch(`http://${FRONTEND_HOST}:${FRONTEND_PORT}${req.url}`, {
-				method: req.method,
-				headers: req.headers as HeadersInit,
-				body: req.method !== "GET" && req.method !== "HEAD" ? JSON.stringify(req.body) : undefined
+				method,
+				headers: req.headers as Record<string, string>,
+				body: ["GET", "HEAD"].includes(method) ? "" : JSON.stringify(req.body)
 			});
 			res.status(res2.status);
 			for (const [key, value] of res2.headers.entries()) {
@@ -153,7 +154,6 @@ app.use(async (req, res, next) => {
 			return res.status(502)
 				.send("Bad Gateway");
 		}
-		return;
 	}
 	return next?.();
 });

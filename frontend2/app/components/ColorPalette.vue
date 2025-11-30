@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { isColorUnlocked, palette } from "../../utils/palette";
+import { isColorUnlocked, palette } from "~/utils/palette";
 import Card from "primevue/card";
 import Button from "primevue/button";
 
