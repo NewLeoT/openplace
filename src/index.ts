@@ -142,7 +142,11 @@ app.use(async (req, res, next) => {
 			const res2 = await fetch(`http://${FRONTEND_HOST}:${FRONTEND_PORT}${req.url}`, {
 				method,
 				headers: req.headers as Record<string, string>,
-				body: ["GET", "HEAD"].includes(method) ? "" : JSON.stringify(req.body)
+				...(["GET", "HEAD"].includes(method)
+					? {}
+					: {
+							body: JSON.stringify(req.body)
+						})
 			});
 			res.status(res2.status);
 			for (const [key, value] of res2.headers.entries()) {
