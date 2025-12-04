@@ -24,7 +24,6 @@
 		"@prisma/client": "^6.18.0",
 		"@tinyhttp/app": "^3.0.1",
 		"@tinyhttp/cookie-parser": "^2.0.6",
-		"@tinyhttp/cors": "^2.0.1",
 		"@zip.js/zip.js": "^2.8.8",
 		"bcryptjs": "^3.0.2",
 		"chalk": "^5.6.2",

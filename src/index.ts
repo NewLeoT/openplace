@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { App, Response } from "@tinyhttp/app";
-import { cors } from "@tinyhttp/cors";
 import { cookieParser } from "@tinyhttp/cookie-parser";
 import fs from "fs/promises";
 import { ServerResponse } from "http";
@@ -71,7 +70,6 @@ app.use((req, _res, next) => {
 	next?.();
 });
 
-app.use(cors());
 app.use(cookieParser());
 
 const jsonMiddleware = json({
