@@ -18,6 +18,7 @@ import leaderboard from "./routes/leaderboard.js";
 import me from "./routes/me.js";
 import moderator from "./routes/moderator.js";
 import notification from "./routes/notification.js";
+import payment from "./routes/payment.js";
 import pixel from "./routes/pixel.js";
 import reportUser from "./routes/report-user.js";
 import store from "./routes/store.js";
@@ -83,20 +84,30 @@ app.use((_req, res, next) => {
 });
 
 app.use((req, res, next) => {
-	// Hack for paths that use multipart body or don't need JSON parsing
-	if (req.path === "/report-user" || req.path === "/moderator/timeout-user" || req.path === "/admin/ban-user" || req.path === "/me/profile-picture" || req.path === "/me/sessions") {
+	const contentType = req.get("content-type")
+		?.split(";")
+		.at(0) ?? "";
+
+	switch (contentType) {
+	case "multipart/form-data":
+		// Routes using form data handle their own parsing
 		return next?.();
+
+	case "application/json":
+	case "text/plain":
+		// text/plain is used because the frontend doesn't set a Content-Type...
+		// Wrap JSON middleware with error handling
+		try {
+			return jsonMiddleware(req, res, next);
+		} catch (error) {
+			console.warn(`[${new Date()
+				.toISOString()}] JSON parsing error for ${req.method} ${req.path} from ${req.ip}:`, error);
+			return res.status(400)
+				.json({ error: "Invalid JSON format" });
+		}
 	}
 
-	// Wrap JSON middleware with error handling
-	try {
-		return jsonMiddleware(req, res, next);
-	} catch (error) {
-		console.warn(`[${new Date()
-			.toISOString()}] JSON parsing error for ${req.method} ${req.path} from ${req.ip}:`, error);
-		return res.status(400)
-			.json({ error: "Invalid JSON format" });
-	}
+	return next?.();
 });
 
 // Logging
@@ -127,6 +138,7 @@ leaderboard(app);
 me(app);
 moderator(app);
 notification(app);
+payment(app);
 pixel(app);
 reportUser(app);
 store(app);
