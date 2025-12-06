@@ -7,7 +7,6 @@ import jwt from "jsonwebtoken";
 import { COOLDOWN_MS, UserService } from "../services/user.js";
 import { AuthenticatedRequest, BanReason, UserRole } from "../types/index.js";
 import { AuthService, AuthToken } from "../services/auth.js";
-import { getRandomUniqueName } from "../utils/unique-name.js";
 import { rateLimiter } from "../services/rate-limiter.js";
 import { discordBot } from "../discord/bot.js";
 
@@ -167,7 +166,7 @@ export default function (app: App) {
 			const user = await prisma.user.create({
 				data: {
 					name: username,
-					nickname: getRandomUniqueName(),
+					nickname: username,
 					passwordHash,
 					registrationIP: req.ip!,
 					lastIP: req.ip!,
