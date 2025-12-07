@@ -89,42 +89,23 @@
 				severity="secondary"
 				:disabled="loading"
 			>
-				<!-- TODO: Tidy this up when we can -->
 				<RouterLink
-					v-if="returnTo !== '/'"
 					:to="returnTo"
 					:class="slotProps.class"
 					:style="{ 'text-decoration': 'none' }"
 				>
 					Not now
 				</RouterLink>
-
-				<a
-					v-else
-					:href="returnTo"
-					:class="slotProps.class"
-					:style="{ 'text-decoration': 'none' }"
-				>
-					Not now
-				</a>
 			</Button>
 		</div>
 
 		<div v-if="!welcome" class="reset-link">
-			<!-- TODO: Tidy this up when we can -->
 			<RouterLink
 				v-if="returnTo !== '/'"
 				:to="returnTo"
 			>
 				Cancel
 			</RouterLink>
-
-			<a
-				v-else
-				:href="returnTo"
-			>
-				Cancel
-			</a>
 		</div>
 	</form>
 </template>

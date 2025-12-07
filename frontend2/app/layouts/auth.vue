@@ -5,9 +5,7 @@
 		<div class="root">
 			<Card class="root-card">
 				<template #header>
-					<!-- TODO: Tidy this up when we can -->
 					<RouterLink
-						v-if="returnTo !== '/'"
 						:to="returnTo"
 						class="logo">
 						<img
@@ -17,18 +15,6 @@
 							height="64"
 						>
 					</RouterLink>
-
-					<a
-						v-else
-						:href="returnTo"
-						class="logo">
-						<img
-							src="/img/logo-512x512.png"
-							alt=""
-							width="64"
-							height="64"
-						>
-					</a>
 				</template>
 
 				<template #content>
