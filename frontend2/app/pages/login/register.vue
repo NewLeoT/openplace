@@ -13,15 +13,6 @@
 		/>
 
 		<InputText
-			v-model="email"
-			placeholder="Email Address"
-			aria-label="Email Address"
-			type="email"
-			autocomplete="email"
-			:disabled="loading"
-		/>
-
-		<InputText
 			v-model="password"
 			placeholder="Password"
 			aria-label="Password"
@@ -44,10 +35,6 @@
 
 		<div class="agreement">
 			By registering, you agree to the rules set by the owner of this instance.
-		</div>
-
-		<div class="agreement">
-			Email address is optional. We only use it in case you forget your password.
 		</div>
 
 		<div class="reset-link">
@@ -82,7 +69,6 @@ const { fetchUserProfile } = useUserProfile();
 
 const loading = ref(false);
 const username = ref("");
-const email = ref("");
 const password = ref("");
 const errorMessage = ref<string | null>(null);
 const loginURL = ref("/login");
@@ -116,7 +102,6 @@ const submit = async (e: Event) => {
 			credentials: "include",
 			body: {
 				username: username.value,
-				email: email.value,
 				password: password.value
 			}
 		});
