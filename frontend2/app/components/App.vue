@@ -31,30 +31,30 @@
 		<div class="app-overlays">
 			<div class="app-overlays-zoom">
 				<MapButton
-v-tooltip.right="'About openplace'"
+					v-tooltip.right="'About openplace'"
 					icon="info"
-										@click="handleAbout"
+					@click="handleAbout"
 				/>
-				
+
 				<MapButton
-v-tooltip.right="'Zoom in'"
+					v-tooltip.right="'Zoom in'"
 					icon="zoom_in"
-										@click="zoomIn"
+					@click="zoomIn"
 				/>
-				
+
 				<MapButton
-v-tooltip.right="'Zoom out'"
+					v-tooltip.right="'Zoom out'"
 					icon="zoom_out"
-										@click="zoomOut"
+					@click="zoomOut"
 				/>
-				
+
 				<MapButton
 					v-if="mapBearing !== 0"
-v-tooltip.right="'Reset map rotation'"
+					v-tooltip.right="'Reset map rotation'"
 					icon="compass"
-										@click="resetMapRotation"
+					@click="resetMapRotation"
 				/>
-							</div>
+			</div>
 
 			<div class="app-overlays-profile">
 				<div v-if="isLoggedIn">
@@ -105,24 +105,24 @@ v-tooltip.right="'Reset map rotation'"
 					severity="primary"
 					raised
 					rounded
-										@click="handleLogIn"
+					@click="handleLogIn"
 				>
 					Log in
 				</Button>
 
 				<MapButton
-v-tooltip.left="'Toggle satellite'"
+					v-tooltip.left="'Toggle satellite'"
 					:icon="isSatellite ? 'map_vector' : 'map_satellite'"
-										@click="toggleSatellite"
+					@click="toggleSatellite"
 				/>
-				
+
 				<MapButton
-v-tooltip.left="'Go to random pixel'"
+					v-tooltip.left="'Go to random pixel'"
 					icon="explore"
-										:loading="isLoadingRandom"
+					:loading="isLoadingRandom"
 					@click="goToRandom"
 				/>
-							</div>
+			</div>
 
 			<div
 				v-if="isLoggedIn"
