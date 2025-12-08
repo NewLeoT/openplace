@@ -12,7 +12,7 @@
 						rounded
 						size="small"
 						severity="secondary"
-						class="pixel-info--close-button"
+						class="pixel-info-close-button"
 						aria-label="Close"
 						@click="$emit('close')"
 					>
@@ -303,7 +303,7 @@ watch(() => props.coords, () => {
 	font-weight: 500;
 }
 
-.pixel-info--close-button {
+.pixel-info-close-button {
 	margin-inline-end: calc(var(--p-button-sm-padding-x) * -1);
 	aspect-ratio: 1;
 }

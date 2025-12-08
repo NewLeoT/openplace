@@ -67,7 +67,7 @@
 							severity="secondary"
 							raised
 							rounded
-							class="app-overlays--avatar-button"
+							class="app-overlays-avatar-button"
 							aria-label="Toggle user menu"
 							@click="toggleUserMenu"
 						>
@@ -81,7 +81,7 @@
 						severity="secondary"
 						raised
 						rounded
-						class="app-overlays--avatar-button"
+						class="app-overlays-avatar-button"
 						aria-label="Toggle user menu"
 						@click="toggleUserMenu"
 					>
@@ -780,7 +780,7 @@ const goToRandom = async () => {
 	z-index: 12;
 }
 
-.app-overlays--avatar-button {
+.app-overlays-avatar-button {
 	padding: 0;
 	margin: 0;
 	overflow: visible;
