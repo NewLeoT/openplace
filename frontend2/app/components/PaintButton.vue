@@ -1,6 +1,6 @@
 <template>
 	<Button
-		severity="info"
+		severity="primary"
 		size="large"
 		raised
 		rounded
