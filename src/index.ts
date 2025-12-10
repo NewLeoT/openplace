@@ -15,6 +15,7 @@ import challenge from "./routes/challenge.js";
 import checkrobots from "./routes/checkrobots.js";
 import discord from "./routes/discord.js";
 import favoriteLocation from "./routes/favorite-location.js";
+import health from "./routes/health.js";
 import leaderboard from "./routes/leaderboard.js";
 import me from "./routes/me.js";
 import moderator from "./routes/moderator.js";
@@ -32,7 +33,8 @@ const noMatchPage = await fs.readFile("./frontend/404.html", "utf8");
 
 const app = new App({
 	settings: {
-		networkExtensions: true
+		networkExtensions: true,
+		xPoweredBy: false
 	},
 
 	noMatchHandler: async (_req, res) => {
@@ -135,6 +137,7 @@ challenge(app);
 checkrobots(app);
 discord(app);
 favoriteLocation(app);
+health(app);
 leaderboard(app);
 me(app);
 moderator(app);
