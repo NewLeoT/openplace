@@ -123,10 +123,9 @@
 				/>
 
 				<MapButton
-					v-tooltip.left="'Go to random pixel'"
+					v-tooltip.left="'Search for a location'"
 					icon="explore"
-					:loading="isLoadingRandom"
-					@click="goToRandom"
+					@click="handleSearch"
 				/>
 			</div>
 
@@ -162,9 +161,19 @@
 					@toggle-eraser="isEraserMode = !isEraserMode"
 				/>
 			</div>
-		</div>
 
-		<PixelInfo
+			<div class="app-overlays-search">
+				<SearchBox
+					ref="searchBoxRef"
+					:is-open="isSearchOpen"
+					@close="isSearchOpen = false"
+					@select="handleSearchSelect"
+					@go-to-random="goToRandom"
+				/>
+			</div>
+	</div>
+
+	<PixelInfo
 			:is-open="selectedPixelCoords !== null"
 			:coords="selectedPixelCoords"
 			@close="selectedPixelCoords = null"
@@ -194,7 +203,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import Toast from "primevue/toast";
 import OverlayBadge from "primevue/overlaybadge";
 import Map, { type LocationWithZoom } from "~/components/Map.vue";
@@ -205,13 +214,15 @@ import UserMenu from "~/components/UserMenu.vue";
 import PixelInfo from "~/components/PixelInfo.vue";
 import NotificationDialog from "~/components/NotificationDialog.vue";
 import StoreDialog from "~/components/StoreDialog.vue";
-import { CLOSE_ZOOM_LEVEL, getPixelId, type LngLat, lngLatToTileCoords, type TileCoords, tileCoordsToLngLat, ZOOM_LEVEL } from "~/utils/coordinates";
+import { CLOSE_ZOOM_LEVEL, getPixelId, type LngLat, lngLatToTileCoords, type TileCoords, tileCoordsToLngLat, WIDE_ZOOM_LEVEL, ZOOM_LEVEL } from "~/utils/coordinates";
 import { type UserProfile, useUserProfile } from "~/composables/useUserProfile";
 import { useCharges } from "~/composables/useCharges";
 import { usePaint } from "~/composables/usePaint";
 import { useErrorToast } from "~/composables/useErrorToast";
 import { useNotifications } from "~/composables/useNotifications";
 import { useTheme } from "~/composables/useTheme";
+import SearchBox from "~/components/SearchBox.vue";
+import { DEFAULT_LOCATIONS } from "~/utils/default-locations";
 
 interface Pixel {
 	id: string;
@@ -220,33 +231,7 @@ interface Pixel {
 }
 
 const USER_RELOAD_INTERVAL = 15_000;
-
-/* eslint-disable array-bracket-spacing,unicorn/numeric-separators-style,unicorn/no-zero-fractions */
-const DEFAULT_COORDS: LngLat[] = [
-	[ 39.90750,  116.39723], // Beijing
-	[ 41.01384,   28.94966], // Istanbul
-	[  6.45407,    3.39467], // Lagos
-	[ 10.82302,  106.62965], // Ho Chi Minh City
-	[ 31.55800,   74.35071], // Lahore
-	[ 19.07283,   72.88261], // Mumbai
-	[-23.54750,  -46.63611], // São Paulo
-	[ 19.42847,  -99.12766], // Mexico City
-	[ 55.75204,   37.61781], // Moscow
-	[ 37.56600,  126.97840], // Seoul
-	[ 35.68950,  139.69171], // Tokyo
-	[ 51.50853,   -0.12574], // London
-	[ 40.71427,  -74.00597], // New York City
-	[ 25.05306,  121.52639], // Taipei
-	[ 22.27832,  114.17469], // Hong Kong
-	[  1.28967,  103.85007], // Singapore
-	[-33.86785,  151.20732], // Sydney
-	[-37.81400,  144.96332], // Melbourne
-	[ 34.05223, -118.24368], // Los Angeles
-	[ 52.52437,   13.41053], // Berlin
-	[ 48.85341,    2.34880], // Paris
-	[-34.92866,  138.59863]  // Adelaide
-];
-/* eslint-enable unicorn/numeric-separators-style,unicorn/numeric-separators-style,unicorn/no-zero-fractions */
+const DEFAULT_COORDS = DEFAULT_LOCATIONS.map(({ coords }) => coords);
 
 const isPaintOpen = ref(false);
 const isSatellite = ref(false);
@@ -255,6 +240,7 @@ const isPixelInfoOpen = ref(false);
 const isNotificationsOpen = ref(false);
 const isAboutOpen = ref(false);
 const isStoreOpen = ref(false);
+const isSearchOpen = ref(false);
 const notificationCount = ref(0);
 const selectedColor = ref("rgba(0,0,0,1)");
 const isEraserMode = ref(false);
@@ -264,9 +250,8 @@ const userProfile = ref<UserProfile | null>(null);
 const isLoading = ref(true);
 const userMenuRef = ref();
 const mapRef = ref();
+const searchBoxRef = ref();
 const mapBearing = ref(0);
-const isLoadingRandom = ref(false);
-const isAnimatingToRandom = ref(false);
 const randomTargetCoords = ref<{ lat: number; lng: number; zoom: number } | null>(null);
 
 let lastUserProfileFetch = Date.now();
@@ -305,7 +290,7 @@ const savedLocation = computed((): LocationWithZoom => {
 		location = {
 			lng,
 			lat,
-			zoom: CLOSE_ZOOM_LEVEL
+			zoom: WIDE_ZOOM_LEVEL
 		};
 	}
 
@@ -718,21 +703,6 @@ const zoomIn = () => mapRef.value?.zoomIn();
 const zoomOut = () => mapRef.value?.zoomOut();
 
 const goToRandom = async () => {
-	// If already animating, jump instantly to the target
-	if (isAnimatingToRandom.value && randomTargetCoords.value) {
-		mapRef.value.jumpToLocation(
-			randomTargetCoords.value.lat,
-			randomTargetCoords.value.lng,
-			randomTargetCoords.value.zoom
-		);
-
-		isAnimatingToRandom.value = false;
-		randomTargetCoords.value = null;
-		return;
-	}
-
-	isLoadingRandom.value = true;
-
 	try {
 		const config = useRuntimeConfig();
 		const data = await $fetch<{
@@ -748,9 +718,8 @@ const goToRandom = async () => {
 		};
 		const [lng, lat] = tileCoordsToLngLat(tileCoords);
 
-		randomTargetCoords.value = { lat, lng, zoom: CLOSE_ZOOM_LEVEL };
-		isAnimatingToRandom.value = true;
-		mapRef.value?.flyToLocation(lat, lng, CLOSE_ZOOM_LEVEL);
+		randomTargetCoords.value = { lat, lng, zoom: WIDE_ZOOM_LEVEL };
+		mapRef.value?.flyToLocation(lat, lng, WIDE_ZOOM_LEVEL);
 	} catch (error) {
 		console.error("Failed to get random pixel:", error);
 		handleError(error);
@@ -758,11 +727,22 @@ const goToRandom = async () => {
 
 	// To support skipping the animation by clicking the button again
 	setTimeout(() => {
-		isAnimatingToRandom.value = false;
 		randomTargetCoords.value = null;
 	}, 4000);
+};
 
-	isLoadingRandom.value = false;
+const handleSearch = async () => {
+	isSearchOpen.value = true;
+	await nextTick();
+	searchBoxRef.value?.focusInput();
+};
+
+const handleSearchSelect = (bbox: [number, number, number, number]) => {
+	const [minLng, minLat, maxLng, maxLat] = bbox;
+	const centerLng = (minLng + maxLng) / 2;
+	const centerLat = (minLat + maxLat) / 2;
+	mapRef.value?.flyToLocation(centerLat, centerLng, WIDE_ZOOM_LEVEL);
+	pushMapLocation([centerLng, centerLat], WIDE_ZOOM_LEVEL);
 };
 </script>
 
@@ -781,8 +761,8 @@ const goToRandom = async () => {
 .app-overlays {
 	display: grid;
 	grid-template-areas:
-		"top-left . top-right"
-		". . ."
+		"top-left search top-right"
+		". search ."
 		"paint paint paint";
 	grid-template-rows: auto 1fr auto;
 	grid-template-columns: auto 1fr auto;
@@ -841,5 +821,11 @@ const goToRandom = async () => {
 	padding: 0;
 	margin: 0;
 	overflow: visible;
+}
+
+.app-overlays-search {
+	grid-area: search;
+	display: flex;
+	justify-content: center;
 }
 </style>
