@@ -1,129 +1,141 @@
 <template>
-	<div
-		v-if="isOpen"
-		class="pixel-info-container"
+	<Dialog
+		:draggable="false"
+		:visible="isOpen"
+		position="bottom"
 	>
-		<Card class="pixel-info-card">
-			<template #header>
-				<div class="pixel-info-header">
-					<h3>Pixel Info</h3>
-					<Button
-						text
-						rounded
-						size="small"
-						severity="secondary"
-						class="pixel-info-close-button"
-						aria-label="Close"
-						@click="$emit('close')"
-					>
-						<Icon name="close" />
-					</Button>
-				</div>
-			</template>
+		<template #header>
+			<div class="pixel-info-header">
+				Pixel Info
+			</div>
+		</template>
 
-			<template #content>
-				<div
-					v-if="loading"
-					class="pixel-info-loading"
-				>
-					<ProgressSpinner />
-				</div>
+		<template #closebutton>
+			<Button
+				text
+				rounded
+				size="small"
+				severity="secondary"
+				class="pixel-info-close-button"
+				aria-label="Close"
+				@click="$emit('close')"
+			>
+				<Icon name="close" />
+			</Button>
+		</template>
 
+		<template #default>
+			<div
+				v-if="loading"
+				class="pixel-info-content pixel-info-loading"
+			>
+				<ProgressSpinner
+					:style="{
+						width: '64px',
+						height: '64px'
+					}"
+				/>
+			</div>
+
+			<div
+				v-else-if="pixelData"
+				class="pixel-info-content"
+			>
 				<div
-					v-else-if="pixelData"
-					class="pixel-info-content"
+					v-if="pixelData.paintedBy.id !== 0"
+					class="pixel-info-section"
 				>
+					<h4>Painted By</h4>
+					<div class="pixel-info-row">
+						<span class="pixel-info-label">User:</span>
+						<span>{{ pixelData.paintedBy.name }}#{{ pixelData.paintedBy.id }}</span>
+						<span
+							v-if="pixelData.paintedBy.verified"
+							v-tooltip.top="'This player has been verified by an administrator of this instance.'">
+							<Icon name="verified" />
+						</span>
+						<span style="opacity: 75%; font-weight: 300;"> • {{ moment(pixelData.paintedBy.paintedAt).fromNow() }}</span>
+					</div>
 					<div
-						v-if="pixelData.paintedBy.id !== 0"
-						class="pixel-info-section"
+						v-if="pixelData.paintedBy.discord"
+						class="pixel-info-row"
 					>
-						<h4>Painted By</h4>
-						<div class="pixel-info-row">
-							<span class="pixel-info-label">User:</span>
-							<span>{{ pixelData.paintedBy.name }}#{{ pixelData.paintedBy.id }}</span>
-							<span
-								v-if="pixelData.paintedBy.verified"
-								v-tooltip.top="'This player has been verified by an administrator of this instance.'">
-								<Icon name="verified" />
-							</span>
-							<span style="opacity: 75%; font-weight: 300;"> • {{ moment(pixelData.paintedBy.paintedAt).fromNow() }}</span>
-						</div>
-						<div
-							v-if="pixelData.paintedBy.discord"
-							class="pixel-info-row"
-						>
-							<span class="pixel-info-label">Discord:</span>
-							<span>{{ pixelData.paintedBy.discord }}</span>
-						</div>
-						<div
-							v-if="pixelData.paintedBy.allianceName"
-							class="pixel-info-row"
-						>
-							<span class="pixel-info-label">Alliance:</span>
-							<span>{{ pixelData.paintedBy.allianceName }}</span>
-						</div>
+						<span class="pixel-info-label">Discord:</span>
+						<span>{{ pixelData.paintedBy.discord }}</span>
 					</div>
-
 					<div
-						v-else
-						class="pixel-info-section"
+						v-if="pixelData.paintedBy.allianceName"
+						class="pixel-info-row"
 					>
-						<p class="pixel-info-empty">
-							This pixel has not been painted yet.
-						</p>
-					</div>
-
-					<div class="pixel-info-section">
-						<h4>Location</h4>
-						<div class="pixel-info-row">
-							<span class="pixel-info-label">Tile:</span>
-							<span>{{ coords?.tile[0] }}, {{ coords?.tile[1] }}</span>
-						</div>
-						<div class="pixel-info-row">
-							<span class="pixel-info-label">Pixel:</span>
-							<span>{{ coords?.pixel[0] }}, {{ coords?.pixel[1] }}</span>
-						</div>
-						<div class="pixel-info-row">
-							<span class="pixel-info-label">Region:</span>
-							<span>{{ pixelData.region.name }}</span>
-						</div>
-					</div>
-
-					<div class="pixel-info-actions">
-						<Button
-							:severity="isFavorite ? 'danger' : 'secondary'"
-							:outlined="!isFavorite"
-							@click="toggleFavorite"
-						>
-							<Icon :name="isFavorite ? 'favorite_off' : 'favorite_on'" />
-							{{ isFavorite ? 'Unfavorite' : 'Favorite' }}
-						</Button>
-
-						<Button
-							severity="danger"
-							outlined
-							@click="$emit('report')"
-						>
-							<Icon name="report" />
-							Report
-						</Button>
+						<span class="pixel-info-label">Alliance:</span>
+						<span>{{ pixelData.paintedBy.allianceName }}</span>
 					</div>
 				</div>
 
 				<div
-					v-else-if="failed"
-					class="pixel-info-error"
+					v-else
+					class="pixel-info-section"
 				>
-					<p>Failed to load pixel information</p>
+					<p class="pixel-info-empty">
+						This pixel has not been painted yet.
+					</p>
 				</div>
-			</template>
-		</Card>
-	</div>
+
+				<div class="pixel-info-section">
+					<h4>Location</h4>
+					<div class="pixel-info-row">
+						<span class="pixel-info-label">Tile:</span>
+						<span>{{ coords?.tile[0] }}, {{ coords?.tile[1] }}</span>
+					</div>
+					<div class="pixel-info-row">
+						<span class="pixel-info-label">Pixel:</span>
+						<span>{{ coords?.pixel[0] }}, {{ coords?.pixel[1] }}</span>
+					</div>
+					<div class="pixel-info-row">
+						<span class="pixel-info-label">Region:</span>
+						<span>{{ pixelData.region.name }}</span>
+					</div>
+				</div>
+			</div>
+
+			<div
+				v-else-if="failed"
+				class="pixel-info-error"
+			>
+				<p>Failed to load pixel information</p>
+			</div>
+		</template>
+
+		<template #footer>
+			<div
+				v-if="pixelData"
+				class="pixel-info-actions"
+			>
+				<Button
+					:severity="isFavorite ? 'danger' : 'secondary'"
+					:outlined="!isFavorite"
+					@click="toggleFavorite"
+				>
+					<Icon :name="isFavorite ? 'favorite_off' : 'favorite_on'" />
+					{{ isFavorite ? 'Unfavorite' : 'Favorite' }}
+				</Button>
+
+				<Button
+					severity="danger"
+					outlined
+					@click="$emit('report')"
+				>
+					<Icon name="report" />
+					Report
+				</Button>
+			</div>
+		</template>
+	</Dialog>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import Card from "primevue/card";
+import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import ProgressSpinner from "primevue/progressspinner";
 import moment from "moment";
@@ -217,11 +229,8 @@ const fetchPixelData = async () => {
 
 	try {
 		const config = useRuntimeConfig();
-		const params = new URLSearchParams([
-			["x", `${x}`],
-			["y", `${y}`]
-		]);
-		pixelData.value = await $fetch(`${config.public.backendUrl}/s0/pixel/${tileX}/${tileY}?${params}`, {
+		pixelData.value = await $fetch(`${config.public.backendUrl}/s0/pixel/${tileX}/${tileY}`, {
+			query: { x, y },
 			credentials: "include"
 		});
 
@@ -279,26 +288,7 @@ watch(() => props.coords, () => {
 </script>
 
 <style scoped>
-.pixel-info-container {
-	position: fixed;
-	bottom: 0.75rem;
-	left: 50%;
-	transform: translateX(-50%);
-	z-index: 1000;
-	max-width: 500px;
-	width: calc(100vw - 2rem);
-}
-
 .pixel-info-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 0.75rem var(--p-card-body-padding) 0 var(--p-card-body-padding);
-	border-bottom: 1px solid var(--p-surface-border);
-}
-
-.pixel-info-header h3 {
-	margin: 0;
 	font-size: 1.1rem;
 	font-weight: 500;
 }
@@ -309,8 +299,6 @@ watch(() => props.coords, () => {
 }
 
 .pixel-info-loading {
-	display: flex;
-	justify-content: center;
 	padding: 2rem;
 }
 
@@ -319,6 +307,12 @@ watch(() => props.coords, () => {
 	flex-direction: column;
 	gap: 1rem;
 	margin-top: -0.25rem;
+}
+
+@media (min-width: 768px) {
+	.pixel-info-content {
+		width: 500px;
+	}
 }
 
 .pixel-info-section {
@@ -362,7 +356,7 @@ watch(() => props.coords, () => {
 .pixel-info-actions {
 	display: flex;
 	gap: 0.5rem;
-	margin-top: 0.5rem;
+	width: 100%;
 }
 
 .pixel-info-actions button {
