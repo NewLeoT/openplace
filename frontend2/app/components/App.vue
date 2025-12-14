@@ -211,6 +211,7 @@ import { useCharges } from "~/composables/useCharges";
 import { usePaint } from "~/composables/usePaint";
 import { useErrorToast } from "~/composables/useErrorToast";
 import { useNotifications } from "~/composables/useNotifications";
+import { useTheme } from "~/composables/useTheme";
 
 interface Pixel {
 	id: string;
@@ -284,6 +285,7 @@ const { fetchUserProfile, logIn, logOut } = useUserProfile();
 const { submitPixels } = usePaint();
 const { showToast, handleError } = useErrorToast();
 const { getUnreadCount } = useNotifications();
+const { initTheme } = useTheme();
 
 const isLoggedIn = computed(() => userProfile.value !== null);
 
@@ -298,7 +300,7 @@ const savedLocation = computed((): LocationWithZoom => {
 		// Ignore
 	}
 
-	if (!location) {
+	if (!location || !location.lng || !location.lat) {
 		const [lng, lat] = DEFAULT_COORDS[Math.floor(Math.random() * DEFAULT_COORDS.length)]!;
 		location = {
 			lng,
@@ -391,6 +393,7 @@ const handleBeforeUnload = (e: BeforeUnloadEvent) => {
 };
 
 onMounted(async () => {
+	initTheme();
 	await updateUserProfile();
 	requestAnimationFrame(() => isLoading.value = false);
 

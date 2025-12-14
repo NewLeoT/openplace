@@ -36,6 +36,46 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="theme-selector">
+					<ButtonGroup
+						role="group"
+						aria-label="Theme selector"
+					>
+						<Button
+							class="theme-selector-button"
+							size="small"
+							:severity="currentTheme === ThemeMode.Light ? 'primary' : 'secondary'"
+							:aria-pressed="currentTheme === ThemeMode.Light"
+							aria-label="Light theme"
+							@click="setTheme(ThemeMode.Light)"
+						>
+							Light
+						</Button>
+
+						<Button
+							class="theme-selector-button"
+							size="small"
+							:severity="currentTheme === ThemeMode.Auto ? 'primary' : 'secondary'"
+							:aria-pressed="currentTheme === ThemeMode.Auto"
+							aria-label="Auto theme"
+							@click="setTheme(ThemeMode.Auto)"
+						>
+							Auto
+						</Button>
+
+						<Button
+							class="theme-selector-button"
+							size="small"
+							:severity="currentTheme === ThemeMode.Dark ? 'primary' : 'secondary'"
+							:aria-pressed="currentTheme === ThemeMode.Dark"
+							aria-label="Dark theme"
+							@click="setTheme(ThemeMode.Dark)"
+						>
+							Dark
+						</Button>
+					</ButtonGroup>
+				</div>
 			</div>
 		</template>
 		<template #item="{ item }">
@@ -56,7 +96,10 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import Menu from "primevue/menu";
+import Button from "primevue/button";
+import ButtonGroup from "primevue/buttongroup";
 import { COUNTRIES } from "../../../src/utils/country";
+import { ThemeMode, useTheme } from "../composables/useTheme";
 
 const props = defineProps<{
 	isOpen: boolean;
@@ -88,10 +131,11 @@ const emit = defineEmits<{
 
 const menu = ref();
 
-const menuItems = ref([
+const { currentTheme, setTheme } = useTheme();
+
+const menuItems = computed(() => [
 	{
 		label: "Notifications",
-		icon: "notifications",
 		command: () => {
 			emit("openNotifications");
 		}
@@ -114,7 +158,7 @@ defineExpose({
 
 <style scoped>
 .user-menu-header {
-	padding: 1rem;
+	padding: 1rem 1rem 0.5rem 1rem;
 	border-bottom: 1px solid var(--p-surface-border);
 }
 
@@ -180,5 +224,17 @@ defineExpose({
 	font-size: 1.25rem;
 	margin-top: -0.1em;
 	line-height: 0;
+}
+
+.theme-selector {
+	margin-top: 1rem;
+}
+
+.theme-selector :deep(.p-buttongroup) {
+	width: 100%;
+}
+
+.theme-selector-button {
+	flex: 1;
 }
 </style>

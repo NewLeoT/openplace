@@ -20,6 +20,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import type { Map as MaplibreMap, Marker, RasterTileSource, StyleSpecification } from "maplibre-gl";
 import { getPixelBounds, getPixelsBetween, getTileBounds, type LngLat, lngLatToTileCoords, TILE_SIZE, type TileCoords, ZOOM_LEVEL } from "~/utils/coordinates";
+import { useTheme } from "~/composables/useTheme";
 
 // Expose things for user scripts to access
 declare global {
@@ -97,15 +98,11 @@ let lastTileRefreshTime = 0;
 
 const tileCanvases = new Map<string, TileCanvas>();
 
-const darkMode = matchMedia("(prefers-color-scheme: dark)");
-const darkModeState = ref(darkMode.matches);
-const darkModeChanged = (e: MediaQueryListEvent) => {
-	darkModeState.value = e.matches;
-};
+const { isDarkMode } = useTheme();
 
 const mapStyleLight = ref<StyleSpecification | null>(null);
 const mapStyleDark = ref<StyleSpecification | null>(null);
-const mapStyle = computed(() => darkModeState.value ? mapStyleDark.value : mapStyleLight.value);
+const mapStyle = computed(() => isDarkMode.value ? mapStyleDark.value : mapStyleLight.value);
 
 watch(() => mapStyle.value, () => {
 	if (map) {
@@ -756,8 +753,6 @@ onMounted(async () => {
 	globalThis.addEventListener("keydown", handleActivity);
 	globalThis.addEventListener("scroll", handleActivity);
 	globalThis.addEventListener("touchstart", handleActivity);
-
-	darkMode.addEventListener("change", darkModeChanged);
 });
 
 watch(() => props.pixels, newPixels => {
@@ -826,7 +821,6 @@ onUnmounted(() => {
 	globalThis.removeEventListener("scroll", handleActivity);
 	globalThis.removeEventListener("touchstart", handleActivity);
 
-	darkMode.removeEventListener("change", darkModeChanged);
 	removeAllCanvases();
 });
 

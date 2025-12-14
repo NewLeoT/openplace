@@ -214,10 +214,8 @@ defineEmits<{
 	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M0 0h8v16h8V8H0z' fill='%23000' fill-opacity='.2'/%3E%3C/svg%3E") 0 0/50% 50% repeat;
 }
 
-@media (prefers-color-scheme: dark) {
-	.color-button--transparent::before {
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M0 0h8v16h8V8H0z' fill='%23fff' fill-opacity='.2'/%3E%3C/svg%3E");
-	}
+.app-dark .color-button--transparent::before {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M0 0h8v16h8V8H0z' fill='%23fff' fill-opacity='.2'/%3E%3C/svg%3E");
 }
 
 .palette-paint-button {

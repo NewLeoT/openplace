@@ -3,10 +3,8 @@
 	--bs-body-font-family: "Mona Sans Variable", -apple-system, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--bs-body-bg: #38435c;
-	}
+:root.app-dark {
+	--bs-body-bg: #38435c;
 }
 
 @layer overrides {
@@ -22,10 +20,8 @@
 		--p-toast-info-background: var(--p-content-background);
 	}
 
-	@media (prefers-color-scheme: dark) {
-		:root {
-			--p-content-background: #18181bee;
-		}
+	:root.app-dark {
+		--p-content-background: #18181bee;
 	}
 
 	// Blur background

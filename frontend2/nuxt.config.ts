@@ -118,7 +118,7 @@ export default defineNuxtConfig({
 
 	devServer: {
 		host: "0.0.0.0",
-		port: Number.parseInt(process.env["FRONTEND_PORT"]!) || 3001
+		port: Number.parseInt(process.env["FRONTEND_PORT"] ?? "") || 3001
 	},
 
 	runtimeConfig: {
@@ -141,7 +141,7 @@ export default defineNuxtConfig({
 			theme: {
 				preset: theme,
 				options: {
-					darkModeSelector: "system",
+					darkModeSelector: ".app-dark",
 					cssLayer: false
 				}
 			}
