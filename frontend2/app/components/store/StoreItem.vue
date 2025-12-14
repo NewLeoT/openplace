@@ -50,7 +50,7 @@
 
 				<BuyButton
 					:disabled="loading || !isValid"
-					:cost="cost"
+					:cost="props.cost * quantity"
 					@click="$emit('purchase')"
 				/>
 			</div>
