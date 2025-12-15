@@ -1,78 +1,67 @@
 <template>
-	<div
-		v-if="isOpen"
-		v-focustrap
-		class="search-box"
+	<Dialog
+		:modal="isMobile"
+		dismissable-mask
+		:draggable="false"
+		:position="isMobile ? 'top' : 'topright'"
+		:visible="isOpen"
+		:style="{
+			marginRight: isMobile ? null : '4.5rem'
+		}"
 	>
-		<Card class="search-input-container">
-			<template #content>
-				<InputGroup class="search-input-group">
-					<Button
-						v-tooltip.bottom="'Close'"
-						severity="secondary"
-						text
-						rounded
-						@click="close"
-					>
-						<Icon name="back" />
-					</Button>
+		<template #container>
+			<div class="search-box">
+				<div class="search-input-container">
+					<InputGroup class="search-input-group">
+						<Button
+							v-if="isMobile"
+							v-tooltip.bottom="'Close'"
+							severity="secondary"
+							text
+							@click="close"
+						>
+							<Icon name="back" />
+						</Button>
 
-					<InputText
-						id="q"
-						ref="inputRef"
-						v-model="query"
-						class="search-input-box"
-						type="search"
-						placeholder="Search for a location"
-						@keydown="handleKeyDown"
-						@input="handleInput"
-					/>
+						<AutoComplete
+							id="q"
+							ref="inputRef"
+							v-model="query"
+							:suggestions="results"
+							class="search-input-box"
+							placeholder="Search the world and more…"
+							@complete="handleSearch"
+							@item-select="onItemSelect"
+							@keydown="handleKeyDown"
+						>
+							<template #option="{ option }">
+								<div class="search-result-item">
+									<div class="search-result-name">{{ option.name }}</div>
+									<div class="search-result-country">{{ option.country }}</div>
+								</div>
+							</template>
+						</AutoComplete>
 
-					<Button
-						v-tooltip.bottom="'Random location'"
-						severity="secondary"
-						text
-						rounded
-						@click="goToRandom"
-					>
-						<Icon name="random" />
-					</Button>
-				</InputGroup>
-			</template>
-		</Card>
-
-		<Card
-			v-if="results.length === 0"
-			class="search-no-results"
-		>
-			<template #content>
-				No results
-			</template>
-		</Card>
-
-		<Menu
-			v-else
-			:model="results"
-		>
-			<template #item="{ item }">
-				<button
-					class="search-result"
-					@click="selectResult(item as SearchResult)"
-				>
-					<div class="search-result-name">{{ item.name }}</div>
-					<div class="search-result-country">{{ item.country }}</div>
-			</button>
-			</template>
-		</Menu>
-	</div>
+						<Button
+							v-tooltip.bottom="'Random location'"
+							severity="secondary"
+							text
+							@click="goToRandom"
+						>
+							<Icon name="random" />
+						</Button>
+					</InputGroup>
+				</div>
+			</div>
+		</template>
+	</Dialog>
 </template>
 
 <script setup lang="ts">
 import { nextTick, ref } from "vue";
 import InputGroup from "primevue/inputgroup";
-import InputText from "primevue/inputtext";
+import AutoComplete from "primevue/autocomplete";
 import Button from "primevue/button";
-import Menu from "primevue/menu";
 import { useErrorToast } from "~/composables/useErrorToast";
 import Icon from "~/components/Icon.vue";
 import { DEFAULT_LOCATIONS } from "~/utils/default-locations";
@@ -102,8 +91,6 @@ interface SearchResult {
 	bbox: [number, number, number, number];
 }
 
-const INPUT_DEBOUNCE_MS = 500;
-
 defineProps<{
 	isOpen: boolean;
 }>();
@@ -125,23 +112,35 @@ const DEFAULT_RESULTS = DEFAULT_LOCATIONS.map((item): SearchResult => ({
 	]
 }));
 
-const inputRef = ref<InstanceType<typeof InputText>>();
+const isMobile = ref(false);
+const inputRef = ref();
 const query = ref("");
 const results = ref<SearchResult[]>(DEFAULT_RESULTS);
 
-let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
-
 const { handleError } = useErrorToast();
 
-const search = async () => {
-	const text = query.value.trim();
+onMounted(() => {
+	const widthQuery = globalThis.matchMedia("(max-width: 768px)");
+	isMobile.value = widthQuery.matches;
+
+	const handleWidthChange = (e: MediaQueryListEvent) => isMobile.value = e.matches;
+	widthQuery.addEventListener("change", handleWidthChange);
+
+	onUnmounted(() => {
+		widthQuery.removeEventListener("change", handleWidthChange);
+	});
+});
+
+const handleSearch = async (event: { query: string }) => {
+	const text = event.query.trim();
 	if (text === "") {
 		results.value = DEFAULT_RESULTS;
 		return;
 	}
 
 	try {
-		const response = await $fetch<AutocompleteResults>("/v1/autocomplete", {
+		const config = useRuntimeConfig();
+		const response = await $fetch<AutocompleteResults>(`${config.public.backendUrl}/v1/autocomplete`, {
 			query: { text }
 		});
 		results.value = response.features?.map(item => ({
@@ -156,21 +155,8 @@ const search = async () => {
 	}
 };
 
-const handleInput = () => {
-	if (debounceTimeout) {
-		clearTimeout(debounceTimeout);
-	}
-
-	if (query.value.trim() === "") {
-		results.value = DEFAULT_RESULTS;
-		return;
-	}
-
-	debounceTimeout = setTimeout(search, INPUT_DEBOUNCE_MS);
-};
-
-const selectResult = (result: SearchResult) => {
-	emit("select", result.bbox);
+const onItemSelect = (event: { value: SearchResult }) => {
+	emit("select", event.value.bbox);
 	close();
 };
 
@@ -178,12 +164,6 @@ const handleKeyDown = (e: KeyboardEvent) => {
 	switch (e.key) {
 	case "Escape":
 		close();
-		break;
-
-	case "Enter":
-		if (results.value.length > 0) {
-			selectResult(results.value[0]!);
-		}
 		break;
 	}
 };
@@ -202,8 +182,9 @@ const goToRandom = () => {
 const focusInput = async () => {
 	await nextTick();
 
-	const el = inputRef.value as unknown as { $el: HTMLInputElement } | undefined;
-	el?.$el?.focus?.();
+	// TODO: Is there really not a better way?
+	const inputElement = inputRef.value?.$el?.querySelector("input");
+	inputElement?.focus();
 };
 
 defineExpose({
@@ -216,9 +197,7 @@ defineExpose({
 	display: flex;
 	flex-direction: column;
 	gap: 0.75rem;
-	padding-top: 1rem;
-	margin-bottom: 1rem;
-	overflow-y: auto;
+	max-width: 350px;
 }
 
 @media (min-width: 768px) {
@@ -231,10 +210,6 @@ defineExpose({
 	border-radius: var(--p-inputgroup-addon-border-radius);
 }
 
-.search-input-container :deep(.p-card-body) {
-	padding: 0;
-}
-
 .search-input-group {
 	display: flex;
 	width: 100%;
@@ -244,21 +219,18 @@ defineExpose({
 	flex: 1;
 }
 
-.search-no-results {
-	text-align: center;
-	padding: 2rem 0;
+.search-result-item {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
 }
 
-.search-result {
-	display: block;
-	width: 100%;
-	padding: 0.5rem 1rem;
-	border: 0;
-	background: none;
-	text-align: start;
+.search-result-name {
+	font-weight: 500;
 }
 
 .search-result-country {
 	font-size: 0.9em;
+	color: var(--p-text-muted-color);
 }
 </style>
