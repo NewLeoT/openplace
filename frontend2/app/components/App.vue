@@ -282,7 +282,6 @@ const initialLocation = computed((): LocationWithZoom => {
 		center: [lng, lat],
 		zoom: WIDE_ZOOM_LEVEL
 	};
-	console.log("RANDOM LOCATION", result.center, result.zoom);
 
 	let savedLocation: { lng: number; lat: number; zoom?: number; } | null = null;
 	try {
