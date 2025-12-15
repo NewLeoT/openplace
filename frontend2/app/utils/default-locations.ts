@@ -9,112 +9,112 @@ export const DEFAULT_LOCATIONS: DefaultLocation[] = [
 	{
 		name: "Beijing",
 		country: "China",
-		coords: [ 39.90750,  116.39723]
+		coords: [ 116.39723,  39.90750]
 	},
 	{
 		name: "Istanbul",
 		country: "Turkey",
-		coords: [ 41.01384,   28.94966]
+		coords: [  28.94966,  41.01384]
 	},
 	{
 		name: "Lagos",
 		country: "Nigeria",
-		coords: [  6.45407,    3.39467]
+		coords: [   3.39467,   6.45407]
 	},
 	{
 		name: "Ho Chi Minh City",
 		country: "Vietnam",
-		coords: [ 10.82302,  106.62965]
+		coords: [ 106.62965,  10.82302]
 	},
 	{
 		name: "Lahore",
 		country: "Pakistan",
-		coords: [ 31.55800,   74.35071]
+		coords: [  74.35071,  31.55800]
 	},
 	{
 		name: "Mumbai",
 		country: "India",
-		coords: [ 19.07283,   72.88261]
+		coords: [  72.88261,  19.07283]
 	},
 	{
 		name: "São Paulo",
 		country: "Brazil",
-		coords: [-23.54750,  -46.63611]
+		coords: [ -46.63611, -23.54750]
 	},
 	{
 		name: "Mexico City",
 		country: "Mexico",
-		coords: [ 19.42847,  -99.12766]
+		coords: [ -99.12766,  19.42847]
 	},
 	{
 		name: "Moscow",
 		country: "Russia",
-		coords: [ 55.75204,   37.61781]
+		coords: [  37.61781,  55.75204]
 	},
 	{
 		name: "Seoul",
 		country: "South Korea",
-		coords: [ 37.56600,  126.97840]
+		coords: [ 126.97840,  37.56600]
 	},
 	{
 		name: "Tokyo",
 		country: "Japan",
-		coords: [ 35.68950,  139.69171]
+		coords: [ 139.69171,  35.68950]
 	},
 	{
 		name: "London",
 		country: "United Kingdom",
-		coords: [ 51.50853,   -0.12574]
+		coords: [  -0.12574,  51.50853]
 	},
 	{
 		name: "New York City",
 		country: "United States",
-		coords: [ 40.71427,  -74.00597]
+		coords: [ -74.00597,  40.71427]
 	},
 	{
 		name: "Taipei",
 		country: "Taiwan",
-		coords: [ 25.05306,  121.52639]
+		coords: [ 121.52639,  25.05306]
 	},
 	{
 		name: "Hong Kong",
 		country: "Hong Kong",
-		coords: [ 22.27832,  114.17469]
+		coords: [ 114.16936,  22.31931]
 	},
 	{
 		name: "Singapore",
 		country: "Singapore",
-		coords: [  1.28967,  103.85007]
+		coords: [ 103.85007,   1.28967]
 	},
 	{
 		name: "Sydney",
 		country: "Australia",
-		coords: [-33.86785,  151.20732]
+		coords: [ 151.20732, -33.86785]
 	},
 	{
 		name: "Melbourne",
 		country: "Australia",
-		coords: [-37.81400,  144.96332]
+		coords: [ 144.96332, -37.81400]
 	},
 	{
 		name: "Los Angeles",
 		country: "United States",
-		coords: [ 34.05223, -118.24368]
+		coords: [-118.24368,  34.05223]
 	},
 	{
 		name: "Berlin",
 		country: "Germany",
-		coords: [ 52.52437,   13.41053]
+		coords: [  13.41053,  52.52437]
 	},
 	{
 		name: "Paris",
 		country: "France",
-		coords: [ 48.85341,    2.34880]
+		coords: [   2.34880,  48.85341]
 	},
 	{
 		name: "Adelaide",
 		country: "Australia",
-		coords: [-34.92866,  138.59863]
+		coords: [ 138.59863, -34.92866]
 	}
 ];
 /* eslint-enable unicorn/numeric-separators-style,unicorn/numeric-separators-style,unicorn/no-zero-fractions */
