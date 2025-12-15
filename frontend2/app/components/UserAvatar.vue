@@ -98,6 +98,14 @@ const monogram = computed(() => {
 	border-radius: 999px;
 }
 
+.avatar-avatar {
+	vertical-align: bottom;
+}
+
+.avatar-avatar :deep(img) {
+	image-rendering: pixelated;
+}
+
 .avatar-avatar--small {
 	width: 16px;
 	height: 16px;
