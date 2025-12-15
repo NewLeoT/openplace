@@ -10,7 +10,8 @@
 		>
 			<div>Zoom: {{ currentZoom.toFixed(2) }}</div>
 			<div v-if="centerCoords">
-				Center: Tx {{ centerCoords.tile[0] }},{{ centerCoords.tile[1] }} Px {{ centerCoords.pixel[0] }},{{ centerCoords.pixel[1] }}
+				Center: Tx {{ centerCoords.tile[0] }}&times;{{ centerCoords.tile[1] }} Px {{ centerCoords.pixel[0] }}&times;{{ centerCoords.pixel[1] }}<br>
+				{{ centerCoords.coords[0].toFixed(6) }}, {{ centerCoords.coords[1].toFixed(6) }}
 			</div>
 		</div>
 	</div>
@@ -89,7 +90,7 @@ const hoverCoords = ref<TileCoords | null>(null);
 const currentZoom = ref(11);
 const lastDrawnCoords = ref<TileCoords | null>(null);
 const isDrawingActive = ref(false);
-const centerCoords = ref<TileCoords | null>(null);
+const centerCoords = ref<TileCoords & { coords: LngLat; } | null>(null);
 
 let saveLocationTimeout: ReturnType<typeof setTimeout> | null = null;
 let tileReloadInterval: ReturnType<typeof setInterval> | null = null;
@@ -685,9 +686,12 @@ onMounted(async () => {
 	globalThis.addEventListener("keyup", handleKeyUp);
 
 	const updateCenterCoords = () => {
-		if (map) {
+		if (map && isDev) {
 			const { lng, lat } = map.getCenter();
-			centerCoords.value = lngLatToTileCoords([lng, lat]);
+			centerCoords.value = {
+				coords: [lng, lat],
+				...lngLatToTileCoords([lng, lat])
+			};
 		}
 	};
 

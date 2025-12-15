@@ -10,7 +10,7 @@
 		<ClientOnly>
 			<Map
 				ref="mapRef"
-				:initial-location="savedLocation"
+				:initial-location="initialLocation"
 				:pixels="pixels"
 				:is-drawing="isPaintOpen"
 				:is-satellite="isSatellite"
@@ -276,29 +276,50 @@ const { initTheme } = useTheme();
 
 const isLoggedIn = computed(() => userProfile.value !== null);
 
-const savedLocation = computed((): LocationWithZoom => {
-	let location: { lng: number; lat: number; zoom: number; } | null = null;
+const initialLocation = computed((): LocationWithZoom => {
+	const [lng, lat] = DEFAULT_COORDS[Math.floor(Math.random() * DEFAULT_COORDS.length)]!;
+	let result: LocationWithZoom = {
+		center: [lng, lat],
+		zoom: WIDE_ZOOM_LEVEL
+	};
+	console.log("RANDOM LOCATION", result.center, result.zoom);
+
+	let savedLocation: { lng: number; lat: number; zoom?: number; } | null = null;
 	try {
 		const locationStr = localStorage["location"];
 		if (locationStr) {
-			location = JSON.parse(locationStr);
+			savedLocation = JSON.parse(locationStr);
+			if (savedLocation && savedLocation.lng && savedLocation.lat) {
+				result = {
+					center: [savedLocation.lng, savedLocation.lat],
+					zoom: savedLocation.zoom ?? CLOSE_ZOOM_LEVEL
+				};
+			}
 		}
 	} catch {
 		// Ignore
 	}
 
-	if (!location || !location.lng || !location.lat) {
-		const [lng, lat] = DEFAULT_COORDS[Math.floor(Math.random() * DEFAULT_COORDS.length)]!;
-		location = {
-			lng,
-			lat,
-			zoom: WIDE_ZOOM_LEVEL
-		};
+	const params = new URLSearchParams(location.search);
+	const latStr = params.get("lat");
+	const lngStr = params.get("lng");
+	const zoomStr = params.get("zoom");
+
+	if (latStr && lngStr && mapRef.value) {
+		const [lat, lng] = [Number.parseFloat(latStr), Number.parseFloat(lngStr)];
+		if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
+			const zoom = Number.parseFloat(zoomStr ?? "") || CLOSE_ZOOM_LEVEL;
+			result = { center: [lng, lat], zoom };
+		}
 	}
 
+	// Clamp to valid range
 	return {
-		center: [location.lng, location.lat],
-		zoom: location?.zoom ?? CLOSE_ZOOM_LEVEL
+		center: [
+			Math.min(Math.max(result.center[0], -180), 180),
+			Math.min(Math.max(result.center[1], -90), 90)
+		],
+		zoom: Math.min(Math.max(result.zoom, 1), 22)
 	};
 });
 
@@ -397,20 +418,6 @@ onMounted(async () => {
 		const color = palette.find(({ index }) => index === selectedColorIndex);
 		if (color) {
 			selectedColor.value = `rgba(${color.rgba.join(",")})`;
-		}
-	}
-
-	// Jump to url params
-	const params = new URLSearchParams(location.search);
-	const latStr = params.get("lat");
-	const lngStr = params.get("lng");
-	const zoomStr = params.get("zoom");
-
-	if (latStr && lngStr && mapRef.value) {
-		const [lat, lng] = [Number.parseFloat(latStr), Number.parseFloat(lngStr)];
-		if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
-			const zoom = Number.parseFloat(zoomStr ?? "") || CLOSE_ZOOM_LEVEL;
-			mapRef.value.jumpToLocation(lat, lng, zoom);
 		}
 	}
 
