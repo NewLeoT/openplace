@@ -89,7 +89,9 @@
 						:key="country.id"
 						class="flag-item"
 					>
-						<div class="flag-item-emoji">{{ country.flag }}</div>
+						<div class="flag-item-emoji">
+							<FlagIcon :code="country.code" />
+						</div>
 						<div class="flag-item-name">{{ country.name }}</div>
 
 						<div class="flag-item-actions">
@@ -310,6 +312,7 @@ const handleClose = () => emit("close");
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 	gap: 1rem;
+	margin-top: 2px;
 	margin-bottom: 1rem;
 }
 
@@ -333,7 +336,6 @@ const handleClose = () => emit("close");
 .flag-item-emoji {
 	font-size: 5rem;
 	line-height: 1em;
-	margin-block: -0.125em;
 }
 
 .flag-item-name {

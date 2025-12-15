@@ -178,6 +178,7 @@ const frontendProxy: Handler = async (req, res, _next) => {
 app.get("/login", frontendProxy);
 app.get("/login/*", frontendProxy);
 app.get("/beta", frontendProxy);
+app.get("/flags/*", frontendProxy);
 app.get("/_nuxt/*", frontendProxy);
 
 app.use(sirv("./frontend", {

@@ -24,9 +24,11 @@
 								<Icon name="verified" />
 							</span>
 							<span
-								v-if="countryFlag"
+								v-if="countryCode"
 								class="country-flag"
-							>{{ countryFlag }}</span>
+							>
+								<FlagIcon :code="countryCode" />
+							</span>
 						</div>
 						<div class="user-stat">
 							<span>Pixels painted: {{ user.pixelsPainted.toLocaleString() }}</span>
@@ -115,12 +117,12 @@ const props = defineProps<{
 	};
 }>();
 
-const countryFlag = computed(() => {
+const countryCode = computed(() => {
 	if (!props.user.equippedFlag) {
 		return null;
 	}
 	const country = COUNTRIES.find(item => item.id === props.user.equippedFlag);
-	return country?.flag ?? null;
+	return country?.code ?? null;
 });
 
 const emit = defineEmits<{

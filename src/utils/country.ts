@@ -2,1514 +2,1262 @@ export interface Country {
 	id: number;
 	name: string;
 	code: string;
-	flag: string;
 }
 
 export const COUNTRIES: Country[] = [
 	{
 		id: 1,
 		name: "Afghanistan",
-		code: "AF",
-		flag: "🇦🇫"
+		code: "AF"
 	},
 	{
 		id: 2,
 		name: "Albania",
-		code: "AL",
-		flag: "🇦🇱"
+		code: "AL"
 	},
 	{
 		id: 3,
 		name: "Algeria",
-		code: "DZ",
-		flag: "🇩🇿"
+		code: "DZ"
 	},
 	{
 		id: 4,
 		name: "American Samoa",
-		code: "AS",
-		flag: "🇦🇸"
+		code: "AS"
 	},
 	{
 		id: 5,
 		name: "Andorra",
-		code: "AD",
-		flag: "🇦🇩"
+		code: "AD"
 	},
 	{
 		id: 6,
 		name: "Angola",
-		code: "AO",
-		flag: "🇦🇴"
+		code: "AO"
 	},
 	{
 		id: 7,
 		name: "Anguilla",
-		code: "AI",
-		flag: "🇦🇮"
+		code: "AI"
 	},
 	{
 		id: 8,
 		name: "Antarctica",
-		code: "AQ",
-		flag: "🇦🇶"
+		code: "AQ"
 	},
 	{
 		id: 9,
 		name: "Antigua and Barbuda",
-		code: "AG",
-		flag: "🇦🇬"
+		code: "AG"
 	},
 	{
 		id: 10,
 		name: "Argentina",
-		code: "AR",
-		flag: "🇦🇷"
+		code: "AR"
 	},
 	{
 		id: 11,
 		name: "Armenia",
-		code: "AM",
-		flag: "🇦🇲"
+		code: "AM"
 	},
 	{
 		id: 12,
 		name: "Aruba",
-		code: "AW",
-		flag: "🇦🇼"
+		code: "AW"
 	},
 	{
 		id: 13,
 		name: "Australia",
-		code: "AU",
-		flag: "🇦🇺"
+		code: "AU"
 	},
 	{
 		id: 14,
 		name: "Austria",
-		code: "AT",
-		flag: "🇦🇹"
+		code: "AT"
 	},
 	{
 		id: 15,
 		name: "Azerbaijan",
-		code: "AZ",
-		flag: "🇦🇿"
+		code: "AZ"
 	},
 	{
 		id: 16,
 		name: "Bahamas",
-		code: "BS",
-		flag: "🇧🇸"
+		code: "BS"
 	},
 	{
 		id: 17,
 		name: "Bahrain",
-		code: "BH",
-		flag: "🇧🇭"
+		code: "BH"
 	},
 	{
 		id: 18,
 		name: "Bangladesh",
-		code: "BD",
-		flag: "🇧🇩"
+		code: "BD"
 	},
 	{
 		id: 19,
 		name: "Barbados",
-		code: "BB",
-		flag: "🇧🇧"
+		code: "BB"
 	},
 	{
 		id: 20,
 		name: "Belarus",
-		code: "BY",
-		flag: "🇧🇾"
+		code: "BY"
 	},
 	{
 		id: 21,
 		name: "Belgium",
-		code: "BE",
-		flag: "🇧🇪"
+		code: "BE"
 	},
 	{
 		id: 22,
 		name: "Belize",
-		code: "BZ",
-		flag: "🇧🇿"
+		code: "BZ"
 	},
 	{
 		id: 23,
 		name: "Benin",
-		code: "BJ",
-		flag: "🇧🇯"
+		code: "BJ"
 	},
 	{
 		id: 24,
 		name: "Bermuda",
-		code: "BM",
-		flag: "🇧🇲"
+		code: "BM"
 	},
 	{
 		id: 25,
 		name: "Bhutan",
-		code: "BT",
-		flag: "🇧🇹"
+		code: "BT"
 	},
 	{
 		id: 26,
 		name: "Bolivia",
-		code: "BO",
-		flag: "🇧🇴"
+		code: "BO"
 	},
 	{
 		id: 27,
 		name: "Bonaire",
-		code: "BQ",
-		flag: "🇧🇶"
+		code: "BQ"
 	},
 	{
 		id: 28,
 		name: "Bosnia and Herzegovina",
-		code: "BA",
-		flag: "🇧🇦"
+		code: "BA"
 	},
 	{
 		id: 29,
 		name: "Botswana",
-		code: "BW",
-		flag: "🇧🇼"
+		code: "BW"
 	},
 	{
 		id: 30,
 		name: "Bouvet Island",
-		code: "BV",
-		flag: "🇧🇻"
+		code: "BV"
 	},
 	{
 		id: 31,
 		name: "Brazil",
-		code: "BR",
-		flag: "🇧🇷"
+		code: "BR"
 	},
 	{
 		id: 32,
 		name: "British Indian Ocean Territory",
-		code: "IO",
-		flag: "🇮🇴"
+		code: "IO"
 	},
 	{
 		id: 33,
 		name: "Brunei Darussalam",
-		code: "BN",
-		flag: "🇧🇳"
+		code: "BN"
 	},
 	{
 		id: 34,
 		name: "Bulgaria",
-		code: "BG",
-		flag: "🇧🇬"
+		code: "BG"
 	},
 	{
 		id: 35,
 		name: "Burkina Faso",
-		code: "BF",
-		flag: "🇧🇫"
+		code: "BF"
 	},
 	{
 		id: 36,
 		name: "Burundi",
-		code: "BI",
-		flag: "🇧🇮"
+		code: "BI"
 	},
 	{
 		id: 37,
 		name: "Cabo Verde",
-		code: "CV",
-		flag: "🇨🇻"
+		code: "CV"
 	},
 	{
 		id: 38,
 		name: "Cambodia",
-		code: "KH",
-		flag: "🇰🇭"
+		code: "KH"
 	},
 	{
 		id: 39,
 		name: "Cameroon",
-		code: "CM",
-		flag: "🇨🇲"
+		code: "CM"
 	},
 	{
 		id: 40,
 		name: "Canada",
-		code: "CA",
-		flag: "🇨🇦"
+		code: "CA"
 	},
 	{
 		id: 41,
 		name: "Cayman Islands",
-		code: "KY",
-		flag: "🇰🇾"
+		code: "KY"
 	},
 	{
 		id: 42,
 		name: "Central African Republic",
-		code: "CF",
-		flag: "🇨🇫"
+		code: "CF"
 	},
 	{
 		id: 43,
 		name: "Chad",
-		code: "TD",
-		flag: "🇹🇩"
+		code: "TD"
 	},
 	{
 		id: 44,
 		name: "Chile",
-		code: "CL",
-		flag: "🇨🇱"
+		code: "CL"
 	},
 	{
 		id: 45,
 		name: "China",
-		code: "CN",
-		flag: "🇨🇳"
+		code: "CN"
 	},
 	{
 		id: 46,
 		name: "Christmas Island",
-		code: "CX",
-		flag: "🇨🇽"
+		code: "CX"
 	},
 	{
 		id: 47,
 		name: "Cocos (Keeling) Islands",
-		code: "CC",
-		flag: "🇨🇨"
+		code: "CC"
 	},
 	{
 		id: 48,
 		name: "Colombia",
-		code: "CO",
-		flag: "🇨🇴"
+		code: "CO"
 	},
 	{
 		id: 49,
 		name: "Comoros",
-		code: "KM",
-		flag: "🇰🇲"
+		code: "KM"
 	},
 	{
 		id: 50,
 		name: "Congo",
-		code: "CG",
-		flag: "🇨🇬"
+		code: "CG"
 	},
 	{
 		id: 51,
 		name: "Cook Islands",
-		code: "CK",
-		flag: "🇨🇰"
+		code: "CK"
 	},
 	{
 		id: 52,
 		name: "Costa Rica",
-		code: "CR",
-		flag: "🇨🇷"
+		code: "CR"
 	},
 	{
 		id: 53,
 		name: "Croatia",
-		code: "HR",
-		flag: "🇭🇷"
+		code: "HR"
 	},
 	{
 		id: 54,
 		name: "Cuba",
-		code: "CU",
-		flag: "🇨🇺"
+		code: "CU"
 	},
 	{
 		id: 55,
 		name: "Curaçao",
-		code: "CW",
-		flag: "🇨🇼"
+		code: "CW"
 	},
 	{
 		id: 56,
 		name: "Cyprus",
-		code: "CY",
-		flag: "🇨🇾"
+		code: "CY"
 	},
 	{
 		id: 57,
 		name: "Czechia",
-		code: "CZ",
-		flag: "🇨🇿"
+		code: "CZ"
 	},
 	{
 		id: 58,
 		name: "Côte d'Ivoire",
-		code: "CI",
-		flag: "🇨🇮"
+		code: "CI"
 	},
 	{
 		id: 59,
 		name: "Denmark",
-		code: "DK",
-		flag: "🇩🇰"
+		code: "DK"
 	},
 	{
 		id: 60,
 		name: "Djibouti",
-		code: "DJ",
-		flag: "🇩🇯"
+		code: "DJ"
 	},
 	{
 		id: 61,
 		name: "Dominica",
-		code: "DM",
-		flag: "🇩🇲"
+		code: "DM"
 	},
 	{
 		id: 62,
 		name: "Dominican Republic",
-		code: "DO",
-		flag: "🇩🇴"
+		code: "DO"
 	},
 	{
 		id: 63,
 		name: "Ecuador",
-		code: "EC",
-		flag: "🇪🇨"
+		code: "EC"
 	},
 	{
 		id: 64,
 		name: "Egypt",
-		code: "EG",
-		flag: "🇪🇬"
+		code: "EG"
 	},
 	{
 		id: 65,
 		name: "El Salvador",
-		code: "SV",
-		flag: "🇸🇻"
+		code: "SV"
 	},
 	{
 		id: 66,
 		name: "Equatorial Guinea",
-		code: "GQ",
-		flag: "🇬🇶"
+		code: "GQ"
 	},
 	{
 		id: 67,
 		name: "Eritrea",
-		code: "ER",
-		flag: "🇪🇷"
+		code: "ER"
 	},
 	{
 		id: 68,
 		name: "Estonia",
-		code: "EE",
-		flag: "🇪🇪"
+		code: "EE"
 	},
 	{
 		id: 69,
 		name: "Eswatini",
-		code: "SZ",
-		flag: "🇸🇿"
+		code: "SZ"
 	},
 	{
 		id: 70,
 		name: "Ethiopia",
-		code: "ET",
-		flag: "🇪🇹"
+		code: "ET"
 	},
 	{
 		id: 71,
 		name: "Falkland Islands (Malvinas)",
-		code: "FK",
-		flag: "🇫🇰"
+		code: "FK"
 	},
 	{
 		id: 72,
 		name: "Faroe Islands",
-		code: "FO",
-		flag: "🇫🇴"
+		code: "FO"
 	},
 	{
 		id: 73,
 		name: "Fiji",
-		code: "FJ",
-		flag: "🇫🇯"
+		code: "FJ"
 	},
 	{
 		id: 74,
 		name: "Finland",
-		code: "FI",
-		flag: "🇫🇮"
+		code: "FI"
 	},
 	{
 		id: 75,
 		name: "France",
-		code: "FR",
-		flag: "🇫🇷"
+		code: "FR"
 	},
 	{
 		id: 76,
 		name: "French Guiana",
-		code: "GF",
-		flag: "🇬🇫"
+		code: "GF"
 	},
 	{
 		id: 77,
 		name: "French Polynesia",
-		code: "PF",
-		flag: "🇵🇫"
+		code: "PF"
 	},
 	{
 		id: 78,
 		name: "French Southern Territories",
-		code: "TF",
-		flag: "🇹🇫"
+		code: "TF"
 	},
 	{
 		id: 79,
 		name: "Gabon",
-		code: "GA",
-		flag: "🇬🇦"
+		code: "GA"
 	},
 	{
 		id: 80,
 		name: "Gambia",
-		code: "GM",
-		flag: "🇬🇲"
+		code: "GM"
 	},
 	{
 		id: 81,
 		name: "Georgia",
-		code: "GE",
-		flag: "🇬🇪"
+		code: "GE"
 	},
 	{
 		id: 82,
 		name: "Germany",
-		code: "DE",
-		flag: "🇩🇪"
+		code: "DE"
 	},
 	{
 		id: 83,
 		name: "Ghana",
-		code: "GH",
-		flag: "🇬🇭"
+		code: "GH"
 	},
 	{
 		id: 84,
 		name: "Gibraltar",
-		code: "GI",
-		flag: "🇬🇮"
+		code: "GI"
 	},
 	{
 		id: 85,
 		name: "Greece",
-		code: "GR",
-		flag: "🇬🇷"
+		code: "GR"
 	},
 	{
 		id: 86,
 		name: "Greenland",
-		code: "GL",
-		flag: "🇬🇱"
+		code: "GL"
 	},
 	{
 		id: 87,
 		name: "Grenada",
-		code: "GD",
-		flag: "🇬🇩"
+		code: "GD"
 	},
 	{
 		id: 88,
 		name: "Guadeloupe",
-		code: "GP",
-		flag: "🇬🇵"
+		code: "GP"
 	},
 	{
 		id: 89,
 		name: "Guam",
-		code: "GU",
-		flag: "🇬🇺"
+		code: "GU"
 	},
 	{
 		id: 90,
 		name: "Guatemala",
-		code: "GT",
-		flag: "🇬🇹"
+		code: "GT"
 	},
 	{
 		id: 91,
 		name: "Guernsey",
-		code: "GG",
-		flag: "🇬🇬"
+		code: "GG"
 	},
 	{
 		id: 92,
 		name: "Guinea",
-		code: "GN",
-		flag: "🇬🇳"
+		code: "GN"
 	},
 	{
 		id: 93,
 		name: "Guinea-Bissau",
-		code: "GW",
-		flag: "🇬🇼"
+		code: "GW"
 	},
 	{
 		id: 94,
 		name: "Guyana",
-		code: "GY",
-		flag: "🇬🇾"
+		code: "GY"
 	},
 	{
 		id: 95,
 		name: "Haiti",
-		code: "HT",
-		flag: "🇭🇹"
+		code: "HT"
 	},
 	{
 		id: 96,
 		name: "Heard Island and McDonald Islands",
-		code: "HM",
-		flag: "🇭🇲"
+		code: "HM"
 	},
 	{
 		id: 97,
 		name: "Honduras",
-		code: "HN",
-		flag: "🇭🇳"
+		code: "HN"
 	},
 	{
 		id: 98,
 		name: "Hong Kong",
-		code: "HK",
-		flag: "🇭🇰"
+		code: "HK"
 	},
 	{
 		id: 99,
 		name: "Hungary",
-		code: "HU",
-		flag: "🇭🇺"
+		code: "HU"
 	},
 	{
 		id: 100,
 		name: "Iceland",
-		code: "IS",
-		flag: "🇮🇸"
+		code: "IS"
 	},
 	{
 		id: 101,
 		name: "India",
-		code: "IN",
-		flag: "🇮🇳"
+		code: "IN"
 	},
 	{
 		id: 102,
 		name: "Indonesia",
-		code: "ID",
-		flag: "🇮🇩"
+		code: "ID"
 	},
 	{
 		id: 103,
 		name: "Iran",
-		code: "IR",
-		flag: "🇮🇷"
+		code: "IR"
 	},
 	{
 		id: 104,
 		name: "Iraq",
-		code: "IQ",
-		flag: "🇮🇶"
+		code: "IQ"
 	},
 	{
 		id: 105,
 		name: "Ireland",
-		code: "IE",
-		flag: "🇮🇪"
+		code: "IE"
 	},
 	{
 		id: 106,
 		name: "Isle of Man",
-		code: "IM",
-		flag: "🇮🇲"
+		code: "IM"
 	},
 	{
 		id: 107,
 		name: "Israel",
-		code: "IL",
-		flag: "🇮🇱"
+		code: "IL"
 	},
 	{
 		id: 108,
 		name: "Italy",
-		code: "IT",
-		flag: "🇮🇹"
+		code: "IT"
 	},
 	{
 		id: 109,
 		name: "Jamaica",
-		code: "JM",
-		flag: "🇯🇲"
+		code: "JM"
 	},
 	{
 		id: 110,
 		name: "Japan",
-		code: "JP",
-		flag: "🇯🇵"
+		code: "JP"
 	},
 	{
 		id: 111,
 		name: "Jersey",
-		code: "JE",
-		flag: "🇯🇪"
+		code: "JE"
 	},
 	{
 		id: 112,
 		name: "Jordan",
-		code: "JO",
-		flag: "🇯🇴"
+		code: "JO"
 	},
 	{
 		id: 113,
 		name: "Kazakhstan",
-		code: "KZ",
-		flag: "🇰🇿"
+		code: "KZ"
 	},
 	{
 		id: 114,
 		name: "Kenya",
-		code: "KE",
-		flag: "🇰🇪"
+		code: "KE"
 	},
 	{
 		id: 115,
 		name: "Kiribati",
-		code: "KI",
-		flag: "🇰🇮"
+		code: "KI"
 	},
 	{
 		id: 116,
 		name: "Kosovo",
-		code: "XK",
-		flag: "🇽🇰"
+		code: "XK"
 	},
 	{
 		id: 117,
 		name: "Kuwait",
-		code: "KW",
-		flag: "🇰🇼"
+		code: "KW"
 	},
 	{
 		id: 118,
 		name: "Kyrgyzstan",
-		code: "KG",
-		flag: "🇰🇬"
+		code: "KG"
 	},
 	{
 		id: 119,
 		name: "Laos",
-		code: "LA",
-		flag: "🇱🇦"
+		code: "LA"
 	},
 	{
 		id: 120,
 		name: "Latvia",
-		code: "LV",
-		flag: "🇱🇻"
+		code: "LV"
 	},
 	{
 		id: 121,
 		name: "Lebanon",
-		code: "LB",
-		flag: "🇱🇧"
+		code: "LB"
 	},
 	{
 		id: 122,
 		name: "Lesotho",
-		code: "LS",
-		flag: "🇱🇸"
+		code: "LS"
 	},
 	{
 		id: 123,
 		name: "Liberia",
-		code: "LR",
-		flag: "🇱🇷"
+		code: "LR"
 	},
 	{
 		id: 124,
 		name: "Libya",
-		code: "LY",
-		flag: "🇱🇾"
+		code: "LY"
 	},
 	{
 		id: 125,
 		name: "Liechtenstein",
-		code: "LI",
-		flag: "🇱🇮"
+		code: "LI"
 	},
 	{
 		id: 126,
 		name: "Lithuania",
-		code: "LT",
-		flag: "🇱🇹"
+		code: "LT"
 	},
 	{
 		id: 127,
 		name: "Luxembourg",
-		code: "LU",
-		flag: "🇱🇺"
+		code: "LU"
 	},
 	{
 		id: 128,
 		name: "Macao",
-		code: "MO",
-		flag: "🇲🇴"
+		code: "MO"
 	},
 	{
 		id: 129,
 		name: "Madagascar",
-		code: "MG",
-		flag: "🇲🇬"
+		code: "MG"
 	},
 	{
 		id: 130,
 		name: "Malawi",
-		code: "MW",
-		flag: "🇲🇼"
+		code: "MW"
 	},
 	{
 		id: 131,
 		name: "Malaysia",
-		code: "MY",
-		flag: "🇲🇾"
+		code: "MY"
 	},
 	{
 		id: 132,
 		name: "Maldives",
-		code: "MV",
-		flag: "🇲🇻"
+		code: "MV"
 	},
 	{
 		id: 133,
 		name: "Mali",
-		code: "ML",
-		flag: "🇲🇱"
+		code: "ML"
 	},
 	{
 		id: 134,
 		name: "Malta",
-		code: "MT",
-		flag: "🇲🇹"
+		code: "MT"
 	},
 	{
 		id: 135,
 		name: "Marshall Islands",
-		code: "MH",
-		flag: "🇲🇭"
+		code: "MH"
 	},
 	{
 		id: 136,
 		name: "Martinique",
-		code: "MQ",
-		flag: "🇲🇶"
+		code: "MQ"
 	},
 	{
 		id: 137,
 		name: "Mauritania",
-		code: "MR",
-		flag: "🇲🇷"
+		code: "MR"
 	},
 	{
 		id: 138,
 		name: "Mauritius",
-		code: "MU",
-		flag: "🇲🇺"
+		code: "MU"
 	},
 	{
 		id: 139,
 		name: "Mayotte",
-		code: "YT",
-		flag: "🇾🇹"
+		code: "YT"
 	},
 	{
 		id: 140,
 		name: "Mexico",
-		code: "MX",
-		flag: "🇲🇽"
+		code: "MX"
 	},
 	{
 		id: 141,
 		name: "Micronesia",
-		code: "FM",
-		flag: "🇫🇲"
+		code: "FM"
 	},
 	{
 		id: 142,
 		name: "Moldova",
-		code: "MD",
-		flag: "🇲🇩"
+		code: "MD"
 	},
 	{
 		id: 143,
 		name: "Monaco",
-		code: "MC",
-		flag: "🇲🇨"
+		code: "MC"
 	},
 	{
 		id: 144,
 		name: "Mongolia",
-		code: "MN",
-		flag: "🇲🇳"
+		code: "MN"
 	},
 	{
 		id: 145,
 		name: "Montenegro",
-		code: "ME",
-		flag: "🇲🇪"
+		code: "ME"
 	},
 	{
 		id: 146,
 		name: "Montserrat",
-		code: "MS",
-		flag: "🇲🇸"
+		code: "MS"
 	},
 	{
 		id: 147,
 		name: "Morocco",
-		code: "MA",
-		flag: "🇲🇦"
+		code: "MA"
 	},
 	{
 		id: 148,
 		name: "Mozambique",
-		code: "MZ",
-		flag: "🇲🇿"
+		code: "MZ"
 	},
 	{
 		id: 149,
 		name: "Myanmar",
-		code: "MM",
-		flag: "🇲🇲"
+		code: "MM"
 	},
 	{
 		id: 150,
 		name: "Namibia",
-		code: "NA",
-		flag: "🇳🇦"
+		code: "NA"
 	},
 	{
 		id: 151,
 		name: "Nauru",
-		code: "NR",
-		flag: "🇳🇷"
+		code: "NR"
 	},
 	{
 		id: 152,
 		name: "Nepal",
-		code: "NP",
-		flag: "🇳🇵"
+		code: "NP"
 	},
 	{
 		id: 153,
 		name: "Netherlands",
-		code: "NL",
-		flag: "🇳🇱"
+		code: "NL"
 	},
 	{
 		id: 154,
 		name: "New Caledonia",
-		code: "NC",
-		flag: "🇳🇨"
+		code: "NC"
 	},
 	{
 		id: 155,
 		name: "New Zealand",
-		code: "NZ",
-		flag: "🇳🇿"
+		code: "NZ"
 	},
 	{
 		id: 156,
 		name: "Nicaragua",
-		code: "NI",
-		flag: "🇳🇮"
+		code: "NI"
 	},
 	{
 		id: 157,
 		name: "Niger",
-		code: "NE",
-		flag: "🇳🇪"
+		code: "NE"
 	},
 	{
 		id: 158,
 		name: "Nigeria",
-		code: "NG",
-		flag: "🇳🇬"
+		code: "NG"
 	},
 	{
 		id: 159,
 		name: "Niue",
-		code: "NU",
-		flag: "🇳🇺"
+		code: "NU"
 	},
 	{
 		id: 160,
 		name: "Norfolk Island",
-		code: "NF",
-		flag: "🇳🇫"
+		code: "NF"
 	},
 	{
 		id: 161,
 		name: "North Korea",
-		code: "KP",
-		flag: "🇰🇵"
+		code: "KP"
 	},
 	{
 		id: 162,
 		name: "North Macedonia",
-		code: "MK",
-		flag: "🇲🇰"
+		code: "MK"
 	},
 	{
 		id: 163,
 		name: "Northern Mariana Islands",
-		code: "MP",
-		flag: "🇲🇵"
+		code: "MP"
 	},
 	{
 		id: 164,
 		name: "Norway",
-		code: "NO",
-		flag: "🇳🇴"
+		code: "NO"
 	},
 	{
 		id: 165,
 		name: "Oman",
-		code: "OM",
-		flag: "🇴🇲"
+		code: "OM"
 	},
 	{
 		id: 166,
 		name: "Pakistan",
-		code: "PK",
-		flag: "🇵🇰"
+		code: "PK"
 	},
 	{
 		id: 167,
 		name: "Palau",
-		code: "PW",
-		flag: "🇵🇼"
+		code: "PW"
 	},
 	{
 		id: 168,
 		name: "Palestine",
-		code: "PS",
-		flag: "🇵🇸"
+		code: "PS"
 	},
 	{
 		id: 169,
 		name: "Panama",
-		code: "PA",
-		flag: "🇵🇦"
+		code: "PA"
 	},
 	{
 		id: 170,
 		name: "Papua New Guinea",
-		code: "PG",
-		flag: "🇵🇬"
+		code: "PG"
 	},
 	{
 		id: 171,
 		name: "Paraguay",
-		code: "PY",
-		flag: "🇵🇾"
+		code: "PY"
 	},
 	{
 		id: 172,
 		name: "Peru",
-		code: "PE",
-		flag: "🇵🇪"
+		code: "PE"
 	},
 	{
 		id: 173,
 		name: "Philippines",
-		code: "PH",
-		flag: "🇵🇭"
+		code: "PH"
 	},
 	{
 		id: 174,
 		name: "Pitcairn",
-		code: "PN",
-		flag: "🇵🇳"
+		code: "PN"
 	},
 	{
 		id: 175,
 		name: "Poland",
-		code: "PL",
-		flag: "🇵🇱"
+		code: "PL"
 	},
 	{
 		id: 176,
 		name: "Portugal",
-		code: "PT",
-		flag: "🇵🇹"
+		code: "PT"
 	},
 	{
 		id: 177,
 		name: "Puerto Rico",
-		code: "PR",
-		flag: "🇵🇷"
+		code: "PR"
 	},
 	{
 		id: 178,
 		name: "Qatar",
-		code: "QA",
-		flag: "🇶🇦"
+		code: "QA"
 	},
 	{
 		id: 179,
 		name: "Republic of the Congo",
-		code: "CD",
-		flag: "🇨🇩"
+		code: "CD"
 	},
 	{
 		id: 180,
 		name: "Romania",
-		code: "RO",
-		flag: "🇷🇴"
+		code: "RO"
 	},
 	{
 		id: 181,
 		name: "Russia",
-		code: "RU",
-		flag: "🇷🇺"
+		code: "RU"
 	},
 	{
 		id: 182,
 		name: "Rwanda",
-		code: "RW",
-		flag: "🇷🇼"
+		code: "RW"
 	},
 	{
 		id: 183,
 		name: "Réunion",
-		code: "RE",
-		flag: "🇷🇪"
+		code: "RE"
 	},
 	{
 		id: 184,
 		name: "Saint Barthélemy",
-		code: "BL",
-		flag: "🇧🇱"
+		code: "BL"
 	},
 	{
 		id: 185,
 		name: "Saint Helena",
-		code: "SH",
-		flag: "🇸🇭"
+		code: "SH"
 	},
 	{
 		id: 186,
 		name: "Saint Kitts and Nevis",
-		code: "KN",
-		flag: "🇰🇳"
+		code: "KN"
 	},
 	{
 		id: 187,
 		name: "Saint Lucia",
-		code: "LC",
-		flag: "🇱🇨"
+		code: "LC"
 	},
 	{
 		id: 188,
 		name: "Saint Martin (French part)",
-		code: "MF",
-		flag: "🇲🇫"
+		code: "MF"
 	},
 	{
 		id: 189,
 		name: "Saint Pierre and Miquelon",
-		code: "PM",
-		flag: "🇵🇲"
+		code: "PM"
 	},
 	{
 		id: 190,
 		name: "Saint Vincent and the Grenadines",
-		code: "VC",
-		flag: "🇻🇨"
+		code: "VC"
 	},
 	{
 		id: 191,
 		name: "Samoa",
-		code: "WS",
-		flag: "🇼🇸"
+		code: "WS"
 	},
 	{
 		id: 192,
 		name: "San Marino",
-		code: "SM",
-		flag: "🇸🇲"
+		code: "SM"
 	},
 	{
 		id: 193,
 		name: "Sao Tome and Principe",
-		code: "ST",
-		flag: "🇸🇹"
+		code: "ST"
 	},
 	{
 		id: 194,
 		name: "Saudi Arabia",
-		code: "SA",
-		flag: "🇸🇦"
+		code: "SA"
 	},
 	{
 		id: 195,
 		name: "Senegal",
-		code: "SN",
-		flag: "🇸🇳"
+		code: "SN"
 	},
 	{
 		id: 196,
 		name: "Serbia",
-		code: "RS",
-		flag: "🇷🇸"
+		code: "RS"
 	},
 	{
 		id: 197,
 		name: "Seychelles",
-		code: "SC",
-		flag: "🇸🇨"
+		code: "SC"
 	},
 	{
 		id: 198,
 		name: "Sierra Leone",
-		code: "SL",
-		flag: "🇸🇱"
+		code: "SL"
 	},
 	{
 		id: 199,
 		name: "Singapore",
-		code: "SG",
-		flag: "🇸🇬"
+		code: "SG"
 	},
 	{
 		id: 200,
 		name: "Sint Maarten (Dutch part)",
-		code: "SX",
-		flag: "🇸🇽"
+		code: "SX"
 	},
 	{
 		id: 201,
 		name: "Slovakia",
-		code: "SK",
-		flag: "🇸🇰"
+		code: "SK"
 	},
 	{
 		id: 202,
 		name: "Slovenia",
-		code: "SI",
-		flag: "🇸🇮"
+		code: "SI"
 	},
 	{
 		id: 203,
 		name: "Solomon Islands",
-		code: "SB",
-		flag: "🇸🇧"
+		code: "SB"
 	},
 	{
 		id: 204,
 		name: "Somalia",
-		code: "SO",
-		flag: "🇸🇴"
+		code: "SO"
 	},
 	{
 		id: 205,
 		name: "South Africa",
-		code: "ZA",
-		flag: "🇿🇦"
+		code: "ZA"
 	},
 	{
 		id: 206,
 		name: "South Georgia and the South Sandwich Islands",
-		code: "GS",
-		flag: "🇬🇸"
+		code: "GS"
 	},
 	{
 		id: 207,
 		name: "South Korea",
-		code: "KR",
-		flag: "🇰🇷"
+		code: "KR"
 	},
 	{
 		id: 208,
 		name: "South Sudan",
-		code: "SS",
-		flag: "🇸🇸"
+		code: "SS"
 	},
 	{
 		id: 209,
 		name: "Spain",
-		code: "ES",
-		flag: "🇪🇸"
+		code: "ES"
 	},
 	{
 		id: 210,
 		name: "Sri Lanka",
-		code: "LK",
-		flag: "🇱🇰"
+		code: "LK"
 	},
 	{
 		id: 211,
 		name: "Sudan",
-		code: "SD",
-		flag: "🇸🇩"
+		code: "SD"
 	},
 	{
 		id: 212,
 		name: "Suriname",
-		code: "SR",
-		flag: "🇸🇷"
+		code: "SR"
 	},
 	{
 		id: 213,
 		name: "Svalbard and Jan Mayen",
-		code: "SJ",
-		flag: "🇸🇯"
+		code: "SJ"
 	},
 	{
 		id: 214,
 		name: "Sweden",
-		code: "SE",
-		flag: "🇸🇪"
+		code: "SE"
 	},
 	{
 		id: 215,
 		name: "Switzerland",
-		code: "CH",
-		flag: "🇨🇭"
+		code: "CH"
 	},
 	{
 		id: 216,
 		name: "Syrian Arab Republic",
-		code: "SY",
-		flag: "🇸🇾"
+		code: "SY"
 	},
 	{
 		id: 217,
 		name: "Taiwan",
-		code: "TW",
-		flag: "🇹🇼"
+		code: "TW"
 	},
 	{
 		id: 218,
 		name: "Tajikistan",
-		code: "TJ",
-		flag: "🇹🇯"
+		code: "TJ"
 	},
 	{
 		id: 219,
 		name: "Tanzania",
-		code: "TZ",
-		flag: "🇹🇿"
+		code: "TZ"
 	},
 	{
 		id: 220,
 		name: "Thailand",
-		code: "TH",
-		flag: "🇹🇭"
+		code: "TH"
 	},
 	{
 		id: 221,
 		name: "Timor-Leste",
-		code: "TL",
-		flag: "🇹🇱"
+		code: "TL"
 	},
 	{
 		id: 222,
 		name: "Togo",
-		code: "TG",
-		flag: "🇹🇬"
+		code: "TG"
 	},
 	{
 		id: 223,
 		name: "Tokelau",
-		code: "TK",
-		flag: "🇹🇰"
+		code: "TK"
 	},
 	{
 		id: 224,
 		name: "Tonga",
-		code: "TO",
-		flag: "🇹🇴"
+		code: "TO"
 	},
 	{
 		id: 225,
 		name: "Trinidad and Tobago",
-		code: "TT",
-		flag: "🇹🇹"
+		code: "TT"
 	},
 	{
 		id: 226,
 		name: "Tunisia",
-		code: "TN",
-		flag: "🇹🇳"
+		code: "TN"
 	},
 	{
 		id: 227,
 		name: "Turkmenistan",
-		code: "TM",
-		flag: "🇹🇲"
+		code: "TM"
 	},
 	{
 		id: 228,
 		name: "Turks and Caicos Islands",
-		code: "TC",
-		flag: "🇹🇨"
+		code: "TC"
 	},
 	{
 		id: 229,
 		name: "Tuvalu",
-		code: "TV",
-		flag: "🇹🇻"
+		code: "TV"
 	},
 	{
 		id: 230,
 		name: "Türkiye",
-		code: "TR",
-		flag: "🇹🇷"
+		code: "TR"
 	},
 	{
 		id: 231,
 		name: "Uganda",
-		code: "UG",
-		flag: "🇺🇬"
+		code: "UG"
 	},
 	{
 		id: 232,
 		name: "Ukraine",
-		code: "UA",
-		flag: "🇺🇦"
+		code: "UA"
 	},
 	{
 		id: 233,
 		name: "United Arab Emirates",
-		code: "AE",
-		flag: "🇦🇪"
+		code: "AE"
 	},
 	{
 		id: 234,
 		name: "United Kingdom",
-		code: "GB",
-		flag: "🇬🇧"
+		code: "GB"
 	},
 	{
 		id: 235,
 		name: "United States",
-		code: "US",
-		flag: "🇺🇸"
+		code: "US"
 	},
 	{
 		id: 236,
 		name: "United States Minor Outlying Islands",
-		code: "UM",
-		flag: "🇺🇲"
+		code: "UM"
 	},
 	{
 		id: 237,
 		name: "Uruguay",
-		code: "UY",
-		flag: "🇺🇾"
+		code: "UY"
 	},
 	{
 		id: 238,
 		name: "Uzbekistan",
-		code: "UZ",
-		flag: "🇺🇿"
+		code: "UZ"
 	},
 	{
 		id: 239,
 		name: "Vanuatu",
-		code: "VU",
-		flag: "🇻🇺"
+		code: "VU"
 	},
 	{
 		id: 240,
 		name: "Vatican City",
-		code: "VA",
-		flag: "🇻🇦"
+		code: "VA"
 	},
 	{
 		id: 241,
 		name: "Venezuela",
-		code: "VE",
-		flag: "🇻🇪"
+		code: "VE"
 	},
 	{
 		id: 242,
 		name: "Viet Nam",
-		code: "VN",
-		flag: "🇻🇳"
+		code: "VN"
 	},
 	{
 		id: 243,
 		name: "Virgin Islands",
-		code: "VG",
-		flag: "🇻🇬"
+		code: "VG"
 	},
 	{
 		id: 244,
 		name: "Virgin Islands",
-		code: "VI",
-		flag: "🇻🇮"
+		code: "VI"
 	},
 	{
 		id: 245,
 		name: "Wallis and Futuna",
-		code: "WF",
-		flag: "🇼🇫"
+		code: "WF"
 	},
 	{
 		id: 246,
 		name: "Western Sahara",
-		code: "EH",
-		flag: "🇪🇭"
+		code: "EH"
 	},
 	{
 		id: 247,
 		name: "Yemen",
-		code: "YE",
-		flag: "🇾🇪"
+		code: "YE"
 	},
 	{
 		id: 248,
 		name: "Zambia",
-		code: "ZM",
-		flag: "🇿🇲"
+		code: "ZM"
 	},
 	{
 		id: 249,
 		name: "Zimbabwe",
-		code: "ZW",
-		flag: "🇿🇼"
+		code: "ZW"
 	},
 	{
 		id: 250,
 		name: "Åland Islands",
-		code: "AX",
-		flag: "🇦🇽"
+		code: "AX"
 	},
 	{
 		id: 251,
 		name: "Canary Islands",
-		code: "IC",
-		flag: "🇮🇨"
+		code: "IC"
 	}
 ];
