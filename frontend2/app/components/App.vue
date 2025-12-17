@@ -535,9 +535,16 @@ const handleSubmitPixels = async () => {
 };
 
 const handleKeyDown = (event: KeyboardEvent) => {
-	if (event.code === "KeyE") {
+	switch (event.code) {
+	case "KeyE":
 		// Toggle eraser
 		isEraserMode.value = !isEraserMode.value;
+		break;
+
+	case "Escape":
+		// Close PixelInfo
+		selectedPixelCoords.value = null;
+		break;
 	}
 };
 
