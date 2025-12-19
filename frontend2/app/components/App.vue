@@ -119,6 +119,7 @@
 				</Button>
 
 				<MapButton
+					v-if="isLoggedIn"
 					v-tooltip.left="'Store'"
 					icon="store"
 					@click="isStoreOpen = true"
