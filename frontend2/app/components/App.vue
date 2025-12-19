@@ -151,36 +151,30 @@
 				/>
 			</div>
 
-			<div
+			<ColorPalette
 				v-if="isLoggedIn"
-				class="app-overlays-palette"
-			>
-				<ColorPalette
-					:is-open="isPaintOpen"
-					:selected-color="selectedColor"
-					:is-eraser-mode="isEraserMode"
-					:charges="currentCharges ?? 0"
-					:max-charges="maxCharges ?? 0"
-					:pixel-count="pixels.length"
-					:time-until-next="formattedTime"
-					:extra-colors-bitmap="userProfile?.extraColorsBitmap ?? 0"
-					@close="handleClosePaint"
-					@submit="handleSubmitPixels"
-					@select-color="handleSelectColor"
-					@purchase-color="handlePurchaseColor"
-					@toggle-eraser="isEraserMode = !isEraserMode"
-				/>
-			</div>
+				:is-open="isPaintOpen"
+				:selected-color="selectedColor"
+				:is-eraser-mode="isEraserMode"
+				:charges="currentCharges ?? 0"
+				:max-charges="maxCharges ?? 0"
+				:pixel-count="pixels.length"
+				:time-until-next="formattedTime"
+				:extra-colors-bitmap="userProfile?.extraColorsBitmap ?? 0"
+				@close="handleClosePaint"
+				@submit="handleSubmitPixels"
+				@select-color="handleSelectColor"
+				@purchase-color="handlePurchaseColor"
+				@toggle-eraser="isEraserMode = !isEraserMode"
+			/>
 
-			<div class="app-overlays-search">
-				<SearchBox
-					ref="searchBoxRef"
-					:is-open="isSearchOpen"
-					@close="isSearchOpen = false"
-					@select="handleSearchSelect"
-					@go-to-random="goToRandom"
-				/>
-			</div>
+			<SearchBox
+				ref="searchBoxRef"
+				:is-open="isSearchOpen"
+				@close="isSearchOpen = false"
+				@select="handleSearchSelect"
+				@go-to-random="goToRandom"
+			/>
 		</div>
 
 		<PixelInfo
@@ -777,8 +771,8 @@ const handleSearchSelect = (bbox: [number, number, number, number]) => {
 .app-overlays {
 	display: grid;
 	grid-template-areas:
-		"top-left search top-right"
-		". search ."
+		"top-left . top-right"
+		". . ."
 		"paint paint paint";
 	grid-template-rows: auto 1fr auto;
 	grid-template-columns: auto 1fr auto;
@@ -795,7 +789,8 @@ const handleSearchSelect = (bbox: [number, number, number, number]) => {
 	pointer-events: auto;
 }
 
-.app-overlays-zoom {
+.app-overlays-zoom,
+.app-overlays-profile {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
@@ -805,15 +800,11 @@ const handleSearchSelect = (bbox: [number, number, number, number]) => {
 }
 
 .app-overlays-profile {
-	display: flex;
-	flex-direction: column;
 	align-items: flex-end;
 	justify-content: flex-end;
 	align-self: end;
 	justify-self: end;
-	gap: var(--spacer);
 	grid-area: top-right;
-	padding: var(--padding);
 }
 
 .app-overlays-paint {
@@ -825,23 +816,9 @@ const handleSearchSelect = (bbox: [number, number, number, number]) => {
 	padding-bottom: var(--padding);
 }
 
-.app-overlays-palette {
-	grid-area: paint;
-	align-self: end;
-	justify-self: stretch;
-	position: relative;
-	z-index: 12;
-}
-
 .app-overlays-avatar-button {
 	padding: 0;
 	margin: 0;
 	overflow: visible;
-}
-
-.app-overlays-search {
-	grid-area: search;
-	display: flex;
-	justify-content: center;
 }
 </style>
