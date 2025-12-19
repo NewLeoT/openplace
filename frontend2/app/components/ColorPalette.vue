@@ -196,7 +196,8 @@ const handleSelectColor = (item: PaletteItem) => {
 }
 
 .palette-card--mobile {
-	--p-card-body-padding: 0.75rem;
+	--p-card-body-padding: 1rem;
+	font-size: 0.95em;
 }
 
 .palette-header {
@@ -209,12 +210,12 @@ const handleSelectColor = (item: PaletteItem) => {
 }
 
 .palette-header-icon {
-	font-size: 1.5rem;
+	font-size: 1.5em;
 	margin-inline-start: 0.25rem;
 }
 
 .palette-header-label {
-	font-size: 1.1rem;
+	font-size: 1.1em;
 	font-weight: 500;
 	margin-block: 0;
 	margin-inline-start: 0.25rem;
