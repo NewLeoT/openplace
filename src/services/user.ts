@@ -292,8 +292,8 @@ export class UserService {
 		const timeoutUntil = new Date();
 
 		if (state) {
-			// 30 day timeout
-			timeoutUntil.setDate(timeoutUntil.getDate() + 30);
+			// 3 day timeout
+			timeoutUntil.setDate(timeoutUntil.getDate() + 3);
 		}
 
 		await this.prisma.user.update({
