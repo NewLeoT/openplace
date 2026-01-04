@@ -127,12 +127,22 @@ export default function (app: App) {
 
 			const userRow = await userService.getUserProfile(req.user!.id)
 				.catch(() => null);
-			if (userRow && userRow.banned) {
-				const reason = userRow.suspensionReason ?? "other";
-				const date = new Date();
-				console.log(`[${date.toISOString()}] [${req.ip}] ${userRow.name}#${userRow.id} attempted to paint ${colors.length} pixels at tile (${tileX}, ${tileY}) while banned.`);
-				return res.status(451)
-					.json({ err: reason, suspension: "ban" });
+			if (userRow) {
+				if (userRow.banned) {
+					const reason = userRow.suspensionReason ?? "other";
+					const date = new Date();
+					console.log(`[${date.toISOString()}] [${req.ip}] ${userRow.name}#${userRow.id} attempted to paint ${colors.length} pixels at tile (${tileX}, ${tileY}) while banned.`);
+					return res.status(451)
+						.json({ err: reason, suspension: "ban" });
+				}
+
+				if (new Date(userRow.timeoutUntil) > new Date()) {
+					const reason = userRow.suspensionReason ?? "other";
+					const date = new Date();
+					console.log(`[${date.toISOString()}] [${req.ip}] ${userRow.name}#${userRow.id} attempted to paint ${colors.length} pixels at tile (${tileX}, ${tileY}) while timed out.`);
+					return res.status(451)
+						.json({ err: reason, suspension: "timeout" });
+				}
 			}
 
 			const account = {
