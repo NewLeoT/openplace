@@ -6,7 +6,7 @@ import { calculateChargeRecharge } from "../utils/charges.js";
 import { Region, RegionService } from "./region.js";
 import { LEVEL_BASE_PIXEL, LEVEL_EXPONENT, LEVEL_UP_DROPLETS_REWARD, LEVEL_UP_MAX_CHARGES_REWARD, PAINTED_DROPLETS_REWARD } from "../config/pixel.js";
 import { AuthService } from "./auth.js";
-import { BanReason } from "../types/index.js";
+import { BanReason, UserRole } from "../types/index.js";
 import { UserService } from "./user.js";
 import { leaderboardService } from "./leaderboard.js";
 import { WplaceBitMap } from "../utils/bitmap.js";
@@ -151,19 +151,19 @@ export class PixelService {
 						paintedAt: pixel.paintedAt
 					});
 				} else {
-				paintedBy.push({
-					id: pixel.user.id,
-					name: pixel.user.nickname || pixel.user.name,
-					allianceId: pixel.user.allianceId || 0,
-					allianceName: pixel.user.alliance?.name || "",
-					equippedFlag: pixel.user.equippedFlag,
-					picture: pixel.user.picture,
-					discord: pixel.user.discord,
-					discordUserId: pixel.user.discordUserId,
-					verified: pixel.user.verified,
-					paintedAt: pixel.paintedAt
-				});
-			}
+					paintedBy.push({
+						id: pixel.user.id,
+						name: pixel.user.nickname || pixel.user.name,
+						allianceId: pixel.user.allianceId || 0,
+						allianceName: pixel.user.alliance?.name || "",
+						equippedFlag: pixel.user.equippedFlag,
+						picture: pixel.user.picture,
+						discord: pixel.user.discord,
+						discordUserId: pixel.user.discordUserId,
+						verified: pixel.user.verified,
+						paintedAt: pixel.paintedAt
+					});
+				}
 			} else {
 				paintedBy.push({
 					id: 0
@@ -436,6 +436,8 @@ export class PixelService {
 			}
 		}
 
+		const isClearingPixels = user.role === UserRole.Admin && colors.every(id => id === 0);
+
 		const pairedCoords = [];
 		for (let i = 0; i < coords.length; i += 2) {
 			pairedCoords.push({ x: coords[i], y: coords[i + 1] });
@@ -543,18 +545,29 @@ export class PixelService {
 			const dbBatchSize = 500;
 			for (let i = 0; i < values.length; i += dbBatchSize) {
 				const batch = values.slice(i, i + dbBatchSize);
-				await this.prisma.$executeRaw`
-				INSERT INTO Pixel (season, tileX, tileY, x, y, colorId, paintedBy, paintedAt, regionCityId, regionCountryId)
-				VALUES ${Prisma.join(batch.map(v =>
+
+				// eslint-disable-next-line unicorn/prefer-ternary
+				if (isClearingPixels) {
+					await this.prisma.$executeRaw`
+						DELETE FROM Pixel
+						WHERE (season, tileX, tileY, x, y) IN (${Prisma.join(batch.map(v =>
+		Prisma.sql`(${v.season}, ${v.tileX}, ${v.tileY}, ${v.x}, ${v.y})`
+	))})
+					`;
+				} else {
+					await this.prisma.$executeRaw`
+						INSERT INTO Pixel (season, tileX, tileY, x, y, colorId, paintedBy, paintedAt, regionCityId, regionCountryId)
+						VALUES ${Prisma.join(batch.map(v =>
 		Prisma.sql`(${v.season}, ${v.tileX}, ${v.tileY}, ${v.x}, ${v.y}, ${v.colorId}, ${v.paintedBy}, ${v.paintedAt}, ${v.regionCityId}, ${v.regionCountryId})`
 	))}
-				ON DUPLICATE KEY UPDATE
-					colorId = VALUES(colorId),
-					paintedBy = VALUES(paintedBy),
-					paintedAt = VALUES(paintedAt),
-					regionCityId = VALUES(regionCityId),
-					regionCountryId = VALUES(regionCountryId)
-			`;
+						ON DUPLICATE KEY UPDATE
+							colorId = VALUES(colorId),
+							paintedBy = VALUES(paintedBy),
+							paintedAt = VALUES(paintedAt),
+							regionCityId = VALUES(regionCityId),
+							regionCountryId = VALUES(regionCountryId)
+					`;
+				}
 
 				// Add delay between batches to prevent database overload
 				if (i + dbBatchSize < values.length) {
@@ -563,100 +576,102 @@ export class PixelService {
 			}
 		}
 
-		const paintedRewards = {
-			droplets: painted * PAINTED_DROPLETS_REWARD
-		};
+		if (!isClearingPixels) {
+			const paintedRewards = {
+				droplets: painted * PAINTED_DROPLETS_REWARD
+			};
 
-		// Retry logic for handling race conditions and deadlocks
-		let retries = 5;
-		while (retries > 0) {
-			try {
-				await this.prisma.$transaction(async (tx) => {
-					// Lock user first, then alliance to prevent deadlock
-					const rows = await tx.$queryRaw<{ id: number; currentCharges: number; maxCharges: number; pixelsPainted: number; level: number; droplets: number; chargesLastUpdatedAt: Date; chargesCooldownMs: number; extraColorsBitmap: number }[]>(
-						Prisma.sql`SELECT id, currentCharges, maxCharges, pixelsPainted, level, droplets, chargesLastUpdatedAt, chargesCooldownMs, extraColorsBitmap FROM User WHERE id = ${userId} LIMIT 1 FOR UPDATE`
-					);
-					const u = rows[0];
-					if (!u) return;
-
-					const currentCharges = calculateChargeRecharge(
-						u.currentCharges,
-						u.maxCharges,
-						u.chargesLastUpdatedAt || new Date(),
-						u.chargesCooldownMs
-					);
-
-					if (currentCharges < totalChargeCost) {
-						throw new Error("attempted to paint more pixels than there was charges.");
-					}
-
-					const newCharges = Math.max(0, currentCharges - totalChargeCost);
-					const newPixelsPainted = u.pixelsPainted + painted;
-					const newLevel = calculateLevel(newPixelsPainted);
-
-					const levelUpRewards = {
-						droplets: Math.floor(newLevel) !== Math.floor(u.level) ? LEVEL_UP_DROPLETS_REWARD : 0,
-						maxCharges: LEVEL_UP_MAX_CHARGES_REWARD * (Math.floor(newLevel) - Math.floor(u.level))
-					};
-
-					// Update user first
-					await tx.user.update({
-						where: { id: userId },
-						data: {
-							currentCharges: newCharges,
-							pixelsPainted: newPixelsPainted,
-							level: newLevel,
-							droplets: u.droplets + levelUpRewards.droplets + paintedRewards.droplets,
-							maxCharges: u.maxCharges + levelUpRewards.maxCharges,
-							chargesLastUpdatedAt: new Date()
-						}
-					});
-
-					// Then update alliance if user has one
-					if (user.allianceId) {
-						// Lock alliance to prevent race conditions
-						const allianceRows = await tx.$queryRaw<{ id: number; pixelsPainted: number }[]>(
-							Prisma.sql`SELECT id, pixelsPainted FROM Alliance WHERE id = ${user.allianceId} LIMIT 1 FOR UPDATE`
+			// Retry logic for handling race conditions and deadlocks
+			let retries = 5;
+			while (retries > 0) {
+				try {
+					await this.prisma.$transaction(async (tx) => {
+						// Lock user first, then alliance to prevent deadlock
+						const rows = await tx.$queryRaw<{ id: number; currentCharges: number; maxCharges: number; pixelsPainted: number; level: number; droplets: number; chargesLastUpdatedAt: Date; chargesCooldownMs: number; extraColorsBitmap: number }[]>(
+							Prisma.sql`SELECT id, currentCharges, maxCharges, pixelsPainted, level, droplets, chargesLastUpdatedAt, chargesCooldownMs, extraColorsBitmap FROM User WHERE id = ${userId} LIMIT 1 FOR UPDATE`
 						);
-						const alliance = allianceRows[0];
-						if (alliance) {
-							await tx.alliance.update({
-								where: { id: user.allianceId },
-								data: { pixelsPainted: alliance.pixelsPainted + painted }
-							});
+						const u = rows[0];
+						if (!u) return;
+
+						const currentCharges = calculateChargeRecharge(
+							u.currentCharges,
+							u.maxCharges,
+							u.chargesLastUpdatedAt || new Date(),
+							u.chargesCooldownMs
+						);
+
+						if (currentCharges < totalChargeCost) {
+							throw new Error("attempted to paint more pixels than there was charges.");
 						}
+
+						const newCharges = Math.max(0, currentCharges - totalChargeCost);
+						const newPixelsPainted = u.pixelsPainted + painted;
+						const newLevel = calculateLevel(newPixelsPainted);
+
+						const levelUpRewards = {
+							droplets: Math.floor(newLevel) !== Math.floor(u.level) ? LEVEL_UP_DROPLETS_REWARD : 0,
+							maxCharges: LEVEL_UP_MAX_CHARGES_REWARD * (Math.floor(newLevel) - Math.floor(u.level))
+						};
+
+						// Update user first
+						await tx.user.update({
+							where: { id: userId },
+							data: {
+								currentCharges: newCharges,
+								pixelsPainted: newPixelsPainted,
+								level: newLevel,
+								droplets: u.droplets + levelUpRewards.droplets + paintedRewards.droplets,
+								maxCharges: u.maxCharges + levelUpRewards.maxCharges,
+								chargesLastUpdatedAt: new Date()
+							}
+						});
+
+						// Then update alliance if user has one
+						if (user.allianceId) {
+							// Lock alliance to prevent race conditions
+							const allianceRows = await tx.$queryRaw<{ id: number; pixelsPainted: number }[]>(
+								Prisma.sql`SELECT id, pixelsPainted FROM Alliance WHERE id = ${user.allianceId} LIMIT 1 FOR UPDATE`
+							);
+							const alliance = allianceRows[0];
+							if (alliance) {
+								await tx.alliance.update({
+									where: { id: user.allianceId },
+									data: { pixelsPainted: alliance.pixelsPainted + painted }
+								});
+							}
+						}
+					}, {
+						timeout: 10_000, // 10 second timeout
+						isolationLevel: "ReadCommitted" // Use read committed to reduce lock contention
+					});
+					break; // Success, exit retry loop
+				} catch (error: any) {
+					retries--;
+
+					// Check if it's a retryable error (race condition, deadlock, timeout)
+					const isRetryableError = (
+						error.message?.includes("Record has changed since last read") ||
+						error.message?.includes("deadlock") ||
+						error.message?.includes("timeout") ||
+						error.code === "P2034" ||
+						error.code === "P2024"
+					);
+
+					if (isRetryableError && retries > 0) {
+						// Exponential backoff with jitter
+						const baseDelay = 100 * Math.pow(2, 5 - retries);
+						const jitter = Math.random() * 50;
+						const delay = Math.min(baseDelay + jitter, 1000);
+
+						console.warn(`[PixelService] Retryable error on attempt ${6 - retries}/5: ${error.message}. Retrying in ${delay}ms`);
+						await new Promise(resolve => setTimeout(resolve, delay));
+						continue;
 					}
-				}, {
-					timeout: 10_000, // 10 second timeout
-					isolationLevel: "ReadCommitted" // Use read committed to reduce lock contention
-				});
-				break; // Success, exit retry loop
-			} catch (error: any) {
-				retries--;
 
-				// Check if it's a retryable error (race condition, deadlock, timeout)
-				const isRetryableError = (
-					error.message?.includes("Record has changed since last read") ||
-					error.message?.includes("deadlock") ||
-					error.message?.includes("timeout") ||
-					error.code === "P2034" ||
-					error.code === "P2024"
-				);
-
-				if (isRetryableError && retries > 0) {
-					// Exponential backoff with jitter
-					const baseDelay = 100 * Math.pow(2, 5 - retries);
-					const jitter = Math.random() * 50;
-					const delay = Math.min(baseDelay + jitter, 1000);
-
-					console.warn(`[PixelService] Retryable error on attempt ${6 - retries}/5: ${error.message}. Retrying in ${delay}ms`);
-					await new Promise(resolve => setTimeout(resolve, delay));
-					continue;
+					// If it's not a retryable error or no retries left, throw the error
+					console.error(`[PixelService] Non-retryable error or max retries exceeded:`, error);
+					throw error;
 				}
-
-				// If it's not a retryable error or no retries left, throw the error
-				console.error(`[PixelService] Non-retryable error or max retries exceeded:`, error);
-				throw error;
 			}
 		}
 
