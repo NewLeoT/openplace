@@ -11,6 +11,7 @@
 		"prepare": "husky",
 		"setup": "tsx scripts/setup.ts",
 		"clear-pixels": "tsx scripts/clear-pixels.ts",
+		"export-user-pixels": "tsx scripts/export-user-pixels.ts",
 		"send-system-notification": "tsx scripts/send-system-notification.ts",
 		"lint": "tsc --noEmit && eslint src/ scripts/",
 		"lint:fix": "eslint --fix src/ scripts/",
