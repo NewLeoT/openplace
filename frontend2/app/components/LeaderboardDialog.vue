@@ -1,6 +1,7 @@
 <template>
 	<Dialog
 		modal
+		dismissable-mask
 		:draggable="false"
 		:visible="isOpen"
 		:style="{
@@ -297,8 +298,7 @@ const navigateToRegion = (region: LeaderboardEntry) => {
 <style scoped>
 .leaderboard-dialog-title {
 	margin: 0;
-	font-size: 1.5rem;
-	font-weight: 600;
+	font-size: inherit;
 }
 
 .leaderboard-container {
